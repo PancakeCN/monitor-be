@@ -35,8 +35,8 @@
 <!--
     通过主键获取一条用户信息
 -->
-    <select id="getAllUserList" resultMap="UserResultMap">
-        select * from monitor.view_user
+    <select id="getOneUserByPrimaryKey" parameterType="String" resultMap="UserResultMap">
+        select * from monitor.view_user where login_name = #{loginName}
     </select>
 
 <!--

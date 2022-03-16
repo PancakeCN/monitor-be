@@ -46,8 +46,8 @@ public class ResultGenerator {
         return result;
     }
     /**返回失败信息*/
-    public static Result<String> genFailResult(String message) {
-        Result<String> result = new Result<>();
+    public static Result<Object> genFailResult(String message) {
+        Result<Object> result = new Result<>();
         result.setResultCode(RESULT_CODE_SERVER_ERROR);
         if (!StringUtils.hasText(message)) {
             result.setMessage(DEFAULT_FAIL_MESSAGE);

@@ -2,6 +2,7 @@ package com.pancake.monitorbe.controller;
 
 import com.pancake.monitorbe.controller.param.LoginParam;
 import com.pancake.monitorbe.common.Constants;
+import com.pancake.monitorbe.controller.param.UserParam;
 import com.pancake.monitorbe.service.UserService;
 import com.pancake.monitorbe.model.Result;
 import com.pancake.monitorbe.util.ResultGenerator;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +37,7 @@ public class UserController {
     @ApiImplicitParam(name = "loginParam", value = "登录参数", required = true,
             dataType = "com.pancake.monitorbe.controller.param.LoginParam")
     @PostMapping("/login")
-    public Result<String> login(@RequestBody @Valid LoginParam loginParam) {
+    public Result<Object> login(@RequestBody @Valid LoginParam loginParam) {
         if (loginParam == null || !StringUtils.hasText(loginParam.getLoginName())
                 || !StringUtils.hasText(loginParam.getPasswordMd5())) {
             return ResultGenerator.genFailResult("用户名或密码不能为空");
@@ -66,28 +68,36 @@ public class UserController {
 
     @ApiOperation(value = "按照登录名（loginName）筛选查询指定一条记录")
     @GetMapping("/getUserByLoginName")
-    public Result<Object> getUserByLoginName(@RequestBody String loginName){
-        return ResultGenerator.genSuccessResult(userService.getUserByLoginName(loginName));
+    public Result<Object> getUserByLoginName(@RequestParam String loginName){
+        if (loginName != null){
+            return ResultGenerator.genSuccessResult(userService.getOneUserFullByLoginName(loginName));
+        }
+        return ResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
     }
 
 
-//    /**
-//     * 新增一条记录
-//     * @author PancakeCN
-//     * @date 2022/2/21 10:42
-//     * @param user String 用户
-//     * @return java.lang.Boolean
-//     */
-//    @ApiOperation(value = "新增一条记录", notes = "")
-//    @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "com.pancake.monitorbe.entity.User")
-//    @PostMapping("/insert")
-//    public Boolean insert(@RequestBody User user) {
-//        if (ObjectUtils.isEmpty(user)){
-//            return false;
-//        }
-//        return userService.insertUser(user) > 0;
-//    }
-//
+    /**
+     * 新增一条记录
+     *
+     * @author PancakeCN
+     * @date 2022/2/21 10:42
+     * @param userP String 用户
+     * @return java.lang.Boolean
+     */
+    @ApiOperation(value = "新增一条记录", notes = "")
+    @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "com.pancake.monitorbe.entity.User")
+    @PostMapping("/insertOneUser")
+    public Result<Object> insertOneUser(@RequestBody UserParam userP) {
+        if (ObjectUtils.isEmpty(userP)){
+            return ResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
+        }else {
+            if (userService.insertOneUserFull(userP) > 0){
+                return ResultGenerator.genSuccessResult("记录新增成功！");
+            }
+            return ResultGenerator.genFailResult("内部错误！记录新增失败！");
+        }
+    }
+
 //    /**
 //     * 修改一条记录
 //     * @author PancakeCN

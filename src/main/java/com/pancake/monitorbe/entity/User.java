@@ -14,4 +14,12 @@ public class User {
     private int auth;
     /**电话号码*/
     private String phoneNumber;
+
+    public User(String loginName, String username, String password, int auth, String phoneNumber) {
+        this.loginName = loginName;
+        this.username = username;
+        this.password = password;
+        this.auth = auth;
+        this.phoneNumber = phoneNumber;
+    }
 }

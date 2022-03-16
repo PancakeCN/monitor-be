@@ -17,8 +17,8 @@ public interface UserService {
     /**
      * 登录验证
      *
-     * @param loginName
-     * @param password
+     * @param loginName 登录名
+     * @param password 密码
      * @return java.lang.String
      * @author PancakeCN
      * @date 2022/3/14 1:27
@@ -37,10 +37,20 @@ public interface UserService {
     /**
      * 按照登录名（loginName）筛选查询指定一条记录
      *
-     * @param loginName
+     * @param loginName 登录名
      * @return com.pancake.monitorbe.controller.param.UserParam
      * @author PancakeCN
      * @date 2022/3/16 17:05
      */
-    UserParam getUserByLoginName(String loginName);
+    UserParam getOneUserFullByLoginName(String loginName);
+
+    /**
+     * 插入一条用户数据（筛选后）
+     *
+     * @param userP 用户参数
+     * @return java.lang.Boolean
+     * @author PancakeCN
+     * @date 2022/3/17 1:38
+     */
+    int insertOneUserFull(UserParam userP);
 }
