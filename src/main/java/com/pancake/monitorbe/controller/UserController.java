@@ -60,9 +60,16 @@ public class UserController {
      */
     @ApiOperation(value = "查询所有记录（筛选后）")
     @GetMapping("/getUserListFull")
-    public Result<Object> queryAll(){
+    public Result<Object> getUserListFull(){
         return ResultGenerator.genSuccessResult(userService.getUserListFull());
     }
+
+    @ApiOperation(value = "按照登录名（loginName）筛选查询指定一条记录")
+    @GetMapping("/getUserByLoginName")
+    public Result<Object> getUserByLoginName(@RequestBody String loginName){
+        return ResultGenerator.genSuccessResult(userService.getUserByLoginName(loginName));
+    }
+
 
 //    /**
 //     * 新增一条记录

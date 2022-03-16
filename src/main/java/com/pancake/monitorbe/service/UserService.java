@@ -33,4 +33,14 @@ public interface UserService {
      * @date 2022/3/14 13:19
      */
     ArrayList<UserParam> getUserListFull();
+
+    /**
+     * 按照登录名（loginName）筛选查询指定一条记录
+     *
+     * @param loginName
+     * @return com.pancake.monitorbe.controller.param.UserParam
+     * @author PancakeCN
+     * @date 2022/3/16 17:05
+     */
+    UserParam getUserByLoginName(String loginName);
 }

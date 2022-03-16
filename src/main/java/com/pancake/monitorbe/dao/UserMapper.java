@@ -27,9 +27,19 @@ public interface UserMapper {
      *
      * @author PancakeCN
      * @date 2022/2/12 3:07
-     * @return List<User>
+     * @return ArrayList<UserResult>
      */
     ArrayList<UserResult> getAllUserList();
+
+    /**
+     * 通过主键获取一条用户信息
+     *
+     * @param loginName
+     * @return com.pancake.monitorbe.model.UserResult
+     * @author PancakeCN
+     * @date 2022/3/16 17:25
+     */
+    UserResult getOneUserByPrimaryKey(String loginName);
 
     /**
      * 获取所有登录名列表（当为普通用户）
@@ -47,23 +57,43 @@ public interface UserMapper {
      * @param user User
      * @return int
      */
-    int insertUser(User user);
+    int insert(User user);
 
     /**
-     * 修改一个用户
+     * 选择性插入一条用户数据
+     *
+     * @param user User
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/16 16:51
+     */
+    int insertSelective(User user);
+
+    /**
+     * 通过主键修改一个用户
      * @author PancakeCN
      * @date 2022/2/12 3:09
      * @param user User
      * @return int
      **/
-    int updateUser(User user);
+    int updateByPrimaryKey(User user);
 
     /**
-     * 删除一个用户
+     * 通过主键 选择性 修改一个用户
+     *
+     * @param user User
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/16 17:14
+     */
+    int updateByPrimaryKeySelective(User user);
+
+    /**
+     * 通过主键删除一条用户数据
      * @author PancakeCN
      * @date 2022/2/12 3:10
      * @param loginName String
      * @return int
      */
-    int deleteUser(String loginName);
+    int deleteByPrimaryKey(String loginName);
 }

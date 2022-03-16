@@ -32,9 +32,16 @@
         select * from monitor.view_user
     </select>
 
-    <!--
-        获取所有登录名列表（当为普通用户）
-    -->
+<!--
+    通过主键获取一条用户信息
+-->
+    <select id="getAllUserList" resultMap="UserResultMap">
+        select * from monitor.view_user
+    </select>
+
+<!--
+    获取所有登录名列表（当为普通用户）
+-->
     <select id="getNormalLoginNameList" resultType="String">
         select login_name from monitor.view_user where auth = 1
     </select>
@@ -50,15 +57,58 @@
     </select>
 
 <!--
-
+    插入一条用户数据
 -->
-
-    <insert id="insertUser" parameterType="com.pancake.monitorbe.entity.User">
+    <insert id="insert" parameterType="com.pancake.monitorbe.entity.User">
         insert into monitor.tb_user(login_name,username,password,auth,phone_number)
         values(#{loginName},#{username},#{password},#{auth},#{phoneNumber})
     </insert>
 
-    <update id="updatedUser" parameterType="com.pancake.monitorbe.entity.User">
+<!--
+    选择性 插入一条用户数据
+-->
+    <insert id="insertSelective" parameterType="com.pancake.monitorbe.entity.User">
+        insert into monitor.tb_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="auth != null">
+                auth,
+            </if>
+            <if test="phoneNumber != null">
+                phone_number,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="loginName != null">
+                #{loginName, jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username, jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="auth != null">
+                #{auth, jdbcType=INTEGER},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber, jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+<!--
+    通过主键修改一个用户
+-->
+    <update id="updateByPrimaryKey" parameterType="com.pancake.monitorbe.entity.User">
         update monitor.tb_user
         set
             login_name=#{loginName},username=#{username},password=#{password},
@@ -66,7 +116,34 @@
         where login_name=#{loginName}
     </update>
 
-    <delete id="deleteUser" parameterType="String">
+<!--
+    通过主键 选择性 修改一个用户
+-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.pancake.monitorbe.entity.User">
+        update monitor.tb_user
+        <set>
+            <if test="loginName != null">
+                login_name = #{loginName, jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                username = #{username, jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="auth != null">
+                auth = #{auth, jdbcType=INTEGER},
+            </if>
+            <if test="phoneNumber != null">
+                phone_number = #{phoneNumber, jdbcType=VARCHAR},
+            </if>
+        </set>
+    </update>
+
+<!--
+    通过主键删除一条用户数据
+-->
+    <delete id="deleteByPrimaryKey" parameterType="String">
         delete from monitor.tb_user where login_name=#{loginName}
     </delete>
 </mapper>

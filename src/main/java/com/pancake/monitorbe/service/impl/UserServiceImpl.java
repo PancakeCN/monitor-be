@@ -79,6 +79,11 @@ public class UserServiceImpl implements UserService {
         return getUserParamList(allUserList);
     }
 
+    @Override
+    public UserParam getUserByLoginName(String loginName) {
+        return null;
+    }
+
     /**
      * 拼接前端界面所需要的UserParamList
      *
