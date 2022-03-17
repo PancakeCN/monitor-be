@@ -1,8 +1,12 @@
 package com.pancake.monitorbe.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     /**用户登录名*/
     private String loginName;
@@ -14,12 +18,4 @@ public class User {
     private int auth;
     /**电话号码*/
     private String phoneNumber;
-
-    public User(String loginName, String username, String password, int auth, String phoneNumber) {
-        this.loginName = loginName;
-        this.username = username;
-        this.password = password;
-        this.auth = auth;
-        this.phoneNumber = phoneNumber;
-    }
 }

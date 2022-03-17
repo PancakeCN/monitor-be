@@ -17,4 +17,18 @@
         select sys_code, sys_name from monitor.view_user_sys where login_name = #{loginName}
     </select>
 
+    <insert id="insertBatch" parameterType="ArrayList">
+        insert into monitor.tb_user_sys(login_name, sys_code)
+        values
+        <foreach collection="list" item="each" separator=",">
+            (#{each.loginName, jdbcType=VARCHAR}, #{each.sysCode, jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+
+
+    <delete id="deleteByPrimaryKey" parameterType="String">
+        delete from monitor.tb_user_sys where login_name = #{loginName};
+    </delete>
+
 </mapper>

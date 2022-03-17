@@ -1,8 +1,10 @@
 package com.pancake.monitorbe.service.impl;
 
 import com.pancake.monitorbe.controller.param.UserParam;
+import com.pancake.monitorbe.dao.SysMapper;
 import com.pancake.monitorbe.dao.UserSysMapper;
 import com.pancake.monitorbe.entity.User;
+import com.pancake.monitorbe.entity.UserSys;
 import com.pancake.monitorbe.entity.UserToken;
 import com.pancake.monitorbe.dao.UserMapper;
 import com.pancake.monitorbe.dao.UserTokenMapper;
@@ -11,6 +13,8 @@ import com.pancake.monitorbe.model.UserSysResult;
 import com.pancake.monitorbe.service.UserService;
 import com.pancake.monitorbe.util.NumberUtil;
 import com.pancake.monitorbe.util.SystemUtil;
+import com.sun.xml.internal.bind.v2.TODO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +28,7 @@ import java.util.*;
  * @date 2022/3/7 17:38
  */
 @Service
+@Log4j2
 public class UserServiceImpl implements UserService {
 
     @Resource
@@ -35,11 +40,14 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserSysMapper userSysMapper;
 
+    @Resource
+    private SysMapper sysMapper;
+
     /**
      * 登录服务层实现（包括token）
      *
-     * @param loginName
-     * @param password
+     * @param loginName 登录名
+     * @param password 密码
      * @return java.lang.String
      * @author PancakeCN
      * @date 2022/3/12 14:54
@@ -89,15 +97,96 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int insertOneUserFull(UserParam userP) {
-
+        boolean flag = false;
         HashMap<UserResult, ArrayList<UserSysResult>> splitRes = splitOneUserParam(userP);
-        for (Map.Entry<UserResult, ArrayList<UserSysResult>> entry : splitRes.entrySet()){
-            if (userMapper.insert(userResultToUser(entry.getKey())) > 0 && userSysMapper.insert(entry.getValue()) > 0){
-                return 1;
+        for (Map.Entry<UserResult, ArrayList<UserSysResult>> entry : splitRes.entrySet()) {
+            if (entry.getValue() != null) {
+                //当为普通用户时（ArrayList<UserSysResult>不为空）
+                //检查表tb_sys中是否存在系统识别码
+                if (checkIfExitsSysCode(entry.getValue())) {
+                    flag = false;
+                    break;
+                }
+                flag = userMapper.insertSelective(userResultToUser(entry.getKey())) > 0
+                        && userSysMapper.insertBatch(userSysResultToUserSys(
+                        entry.getValue(), entry.getKey().getLoginName())) > 0;
             }else {
-                return 0;
+                //当为管理员时（ArrayList<UserSysResult>为空）
+                flag = userMapper.insertSelective(userResultToUser(entry.getKey())) > 0;
             }
         }
+        if (flag){
+            //插入成功
+            return 1;
+        }else {
+            //插入失败
+            return 0;
+        }
+    }
+
+
+    @Override
+    public int updateOneUserFull(UserParam userP) {
+        //TODO 完善更新操作。注：更新tb_sys时会涉及删除操作。 同时删除tb_user_token中的值。
+        //FIXME
+        return 0;
+    }
+
+    @Override
+    public int deleteOneUserFull(String loginName) {
+        boolean flag = false;
+        if (userTokenMapper.selectByPrimaryKey(loginName) != null) {
+            flag = userMapper.deleteByPrimaryKey(loginName) > 0 &&
+                    userSysMapper.deleteByPrimaryKey(loginName) > 0 &&
+                    userTokenMapper.deleteByPrimaryKey(loginName) > 0;
+        }else {
+            flag = userMapper.deleteByPrimaryKey(loginName) > 0 &&
+                    userSysMapper.deleteByPrimaryKey(loginName) > 0;
+        }
+        if (flag) {
+            return 1;
+        }else {
+            return 0;
+        }
+    }
+
+    /**
+     * 检查tb_sys中是否存在传入的sysCode
+     *
+     * @param eachUserSys 每一个UserSysResult类
+     * @return boolean
+     * @author PancakeCN
+     * @date 2022/3/18 0:30
+     */
+    private boolean checkIfExitsSysCode(ArrayList<UserSysResult> eachUserSys) {
+        //检查tb_sys中是否存在这个sysCode
+        for (UserSysResult usr : eachUserSys) {
+            if (sysMapper.checkIfExitsSysCode(usr.getSysCode()) == null) {
+                //存在，抛出错误
+                log.error("数据库中不存在名为{}的sysCode，请重试。", usr.getSysCode());
+                return true;
+            }
+        }
+        //不存在
+        return false;
+    }
+
+    /**
+     * UserSysResult转UserSys类
+     *
+     * @param userSysR UserSysResult
+     * @param loginName 登录名
+     * @return java.util.ArrayList<com.pancake.monitorbe.entity.UserSys>
+     * @author PancakeCN
+     * @date 2022/3/17 20:05
+     */
+    private ArrayList<UserSys> userSysResultToUserSys(ArrayList<UserSysResult> userSysR, String loginName) {
+
+        ArrayList<UserSys> userSys = new ArrayList<>();
+        for (UserSysResult usr : userSysR) {
+            userSys.add(new UserSys(loginName, usr.getSysCode()));
+        }
+        return userSys;
     }
 
     /**
@@ -110,11 +199,8 @@ public class UserServiceImpl implements UserService {
      */
     private User userResultToUser(UserResult userR) {
         return new User(
-                userR.getLoginName(),
-                userR.getUsername(),
-                userR.getPassword(),
-                userR.getAuth(),
-                userR.getPhoneNumber()
+                userR.getLoginName(), userR.getUsername(), userR.getPassword(),
+                userR.getAuth(), userR.getPhoneNumber()
         );
     }
 

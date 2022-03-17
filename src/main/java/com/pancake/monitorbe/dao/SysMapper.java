@@ -21,6 +21,16 @@ public interface SysMapper {
      */
     ArrayList<Sys> getAllSystemList();
 
+    /**
+     * 检查是否存在某一 sysCode（用于新建/修改用户信息UserParam）
+     *
+     * @param sysCode 系统识别码
+     * @return java.lang.String
+     * @author PancakeCN
+     * @date 2022/3/17 23:19
+     */
+    String checkIfExitsSysCode(String sysCode);
+
     int insertOneSystem();
 
     int updateOneSystem();

@@ -1,7 +1,9 @@
 package com.pancake.monitorbe.controller.param;
 
 import com.pancake.monitorbe.model.UserSysResult;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
  * @date 2022/3/14 2:20
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserParam implements Serializable {
 
     /**用户登录名*/
@@ -33,14 +37,4 @@ public class UserParam implements Serializable {
     private ArrayList<UserSysResult> userSys;
     /**电话号码*/
     private String phoneNumber;
-
-    public UserParam(String loginName, String username, String password, int auth, String authComment, ArrayList<UserSysResult> userSys, String phoneNumber) {
-        this.loginName = loginName;
-        this.username = username;
-        this.password = password;
-        this.auth = auth;
-        this.authComment = authComment;
-        this.userSys = userSys;
-        this.phoneNumber = phoneNumber;
-    }
 }

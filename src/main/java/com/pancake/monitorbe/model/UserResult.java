@@ -1,5 +1,6 @@
 package com.pancake.monitorbe.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -10,6 +11,7 @@ import lombok.Data;
  * @date 2022/3/15 1:07
  */
 @Data
+@AllArgsConstructor
 public class UserResult {
 
     /**登录名*/
@@ -25,12 +27,4 @@ public class UserResult {
     /**电话号码*/
     private String phoneNumber;
 
-    public UserResult(String loginName, String username, String password, int auth, String authComment, String phoneNumber) {
-        this.loginName = loginName;
-        this.username = username;
-        this.password = password;
-        this.auth = auth;
-        this.authComment = authComment;
-        this.phoneNumber = phoneNumber;
-    }
 }

@@ -54,4 +54,12 @@
             </if>
         </trim>
     </insert>
+
+
+<!--
+    通过主键删除
+-->
+    <delete id="deleteByPrimaryKey" parameterType="String">
+        delete from monitor.tb_user_token where login_name = #{loginName};
+    </delete>
 </mapper>

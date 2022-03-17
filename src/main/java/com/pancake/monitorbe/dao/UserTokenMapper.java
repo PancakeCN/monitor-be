@@ -28,4 +28,16 @@ public interface UserTokenMapper {
      * @date 2022/3/12 11:45
      */
     int insertSelective(UserToken userToken);
+
+
+
+    /**
+     * 通过主键删除一条记录
+     *
+     * @param loginName 登录名
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/18 1:46
+     */
+    int deleteByPrimaryKey(String loginName);
 }

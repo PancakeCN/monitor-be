@@ -66,6 +66,7 @@ public class UserController {
         return ResultGenerator.genSuccessResult(userService.getUserListFull());
     }
 
+
     @ApiOperation(value = "按照登录名（loginName）筛选查询指定一条记录")
     @GetMapping("/getUserByLoginName")
     public Result<Object> getUserByLoginName(@RequestParam String loginName){
@@ -85,7 +86,8 @@ public class UserController {
      * @return java.lang.Boolean
      */
     @ApiOperation(value = "新增一条记录", notes = "")
-    @ApiImplicitParam(name = "user", value = "用户", required = true, dataType = "com.pancake.monitorbe.entity.User")
+    @ApiImplicitParam(name = "userP", value = "登录参数", required = true,
+            dataType = "com.pancake.monitorbe.controller.param.UserParam")
     @PostMapping("/insertOneUser")
     public Result<Object> insertOneUser(@RequestBody UserParam userP) {
         if (ObjectUtils.isEmpty(userP)){
@@ -98,38 +100,48 @@ public class UserController {
         }
     }
 
-//    /**
-//     * 修改一条记录
-//     * @author PancakeCN
-//     * @date 2022/2/21 11:13
-//     * @param user String 用户
-//     * @return java.lang.Boolean
-//     */
-//    @ApiOperation(value = "修改一条记录", notes = "")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name="user", value = "用户", required = true, dataType = "com.pancake.monitorbe.entity.User")
-//    })
-//    @PutMapping("/update")
-//    public Boolean update(@RequestBody User user){
-//        if (ObjectUtils.isEmpty(user)) {
-//            return false;
-//        }
-//        return userService.updateUser(user) > 0;
-//    }
-//
-//    /**
-//     * 删除一条记录
-//     *
-//     * @author PancakeCN
-//     * @date 2022/2/21 11:20
-//     * @param loginName String 登录名
-//     * @return java.lang.Boolean
-//     */
-//    @DeleteMapping("/delete/{loginName}")
-//    public Boolean delete(@PathVariable String loginName){
-//        if (!StringUtils.hasText(loginName)){
-//            return false;
-//        }
-//        return userService.deleteUser(loginName) > 0;
-//    }
+    /**
+     * 修改一条记录
+     *
+     * @author PancakeCN
+     * @date 2022/2/21 11:13
+     * @param userP 用户参数
+     * @return java.lang.Boolean
+     */
+    @ApiOperation(value = "修改一条记录", notes = "")
+    @ApiImplicitParam(name="userP", value = "用户参数", required = true,
+            dataType = "com.pancake.monitorbe.controller.param.UserParam")
+    @PutMapping("/updateOneUser")
+    public Result<Object> updateOneUser(@RequestBody UserParam userP){
+        if (ObjectUtils.isEmpty(userP)) {
+            return ResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
+        }else {
+            if (userService.updateOneUserFull(userP) > 0){
+                return ResultGenerator.genSuccessResult("记录修改成功！");
+            }
+            return ResultGenerator.genFailResult("内部错误！记录修改失败！");
+        }
+    }
+
+    /**
+     * 删除一条记录
+     *
+     * @author PancakeCN
+     * @date 2022/2/21 11:20
+     * @param loginName String 登录名
+     * @return java.lang.Boolean
+     */
+    @ApiOperation(value = "删除一条记录", notes = "")
+    @ApiImplicitParam(name = "loginName", value = "用户名", required = true, dataType = "String")
+    @DeleteMapping("/deleteOneUser/{loginName}")
+    public Result<Object> deleteOneUser(@PathVariable String loginName){
+        if (!StringUtils.hasText(loginName)){
+            return ResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
+        }else {
+            if (userService.deleteOneUserFull(loginName) > 0){
+                return ResultGenerator.genSuccessResult("记录删除成功！");
+            }
+            return ResultGenerator.genFailResult("内部错误！记录删除失败！");
+        }
+    }
 }

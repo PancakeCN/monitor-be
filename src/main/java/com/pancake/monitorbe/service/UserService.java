@@ -53,4 +53,24 @@ public interface UserService {
      * @date 2022/3/17 1:38
      */
     int insertOneUserFull(UserParam userP);
+
+    /**
+     * 更新一条用户数据（筛选后）
+     *
+     * @param userP 用户参数
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/18 0:28
+     */
+    int updateOneUserFull(UserParam userP);
+
+    /**
+     * 删除一条用户记录（筛选后）
+     *
+     * @param loginName 登录名
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/18 1:29
+     */
+    int deleteOneUserFull(String loginName);
 }

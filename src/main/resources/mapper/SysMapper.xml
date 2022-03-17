@@ -16,6 +16,10 @@
         order by sys_code desc
     </select>
 
+    <select id="checkIfExitsSysCode" parameterType="String" resultType="String">
+        select sys_code from monitor.tb_sys where sys_code = #{sysCode, jdbcType=VARCHAR}
+    </select>
+
 <!--    <insert id="insertSys" parameterType="com.pancake.monitorbe.entity.Sys">-->
 <!--        insert into monitor.tb_user(login_name,username,password,auth,phone_number)-->
 <!--        values(#{loginName},#{username},#{password},#{auth},#{phoneNumber})-->

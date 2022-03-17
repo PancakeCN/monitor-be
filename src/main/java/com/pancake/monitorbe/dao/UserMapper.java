@@ -90,6 +90,7 @@ public interface UserMapper {
 
     /**
      * 通过主键删除一条用户数据
+     *
      * @author PancakeCN
      * @date 2022/2/12 3:10
      * @param loginName String
