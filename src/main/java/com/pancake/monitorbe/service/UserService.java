@@ -35,6 +35,16 @@ public interface UserService {
     ArrayList<UserParam> getUserListFull();
 
     /**
+     * 通过username模糊查询用户列表
+     *
+     * @param usernameIn 待查找的用户名
+     * @return java.util.ArrayList<com.pancake.monitorbe.controller.param.UserParam>
+     * @author PancakeCN
+     * @date 2022/3/18 16:09
+     */
+    ArrayList<UserParam> getUserListByUsernameFuzzy(String usernameIn);
+
+    /**
      * 按照登录名（loginName）筛选查询指定一条记录
      *
      * @param loginName 登录名

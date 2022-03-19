@@ -34,7 +34,7 @@ public interface UserMapper {
     /**
      * 通过主键获取一条用户信息
      *
-     * @param loginName
+     * @param loginName 登录名
      * @return com.pancake.monitorbe.model.UserResult
      * @author PancakeCN
      * @date 2022/3/16 17:25
@@ -49,6 +49,16 @@ public interface UserMapper {
      * @date 2022/3/15 1:52
      */
     ArrayList<String> getNormalLoginNameList();
+
+    /**
+     * 通过username模糊查询用户列表
+     *
+     * @param usernameIn 待查询的用户名
+     * @return java.util.ArrayList<com.pancake.monitorbe.model.UserResult>
+     * @author PancakeCN
+     * @date 2022/3/18 16:37
+     */
+    ArrayList<UserResult> getUserListByUsernameFuzzy(String usernameIn);
 
     /**
      * 插入一个用户

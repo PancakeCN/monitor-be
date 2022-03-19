@@ -54,12 +54,7 @@ public class UserController {
         return ResultGenerator.genFailResult(loginResult);
     }
 
-    /**
-     * 查询所有记录
-     * @author PancakeCN
-     * @date 2022/2/21 10:40
-     * @return java.util.List<com.pancake.monitorbe.entity.User>
-     */
+
     @ApiOperation(value = "查询所有记录（筛选后）")
     @GetMapping("/getUserListFull")
     public Result<Object> getUserListFull(){
@@ -67,7 +62,19 @@ public class UserController {
     }
 
 
+    @ApiOperation(value = "按照用户名模糊查询一条/多条记录")
+    @ApiImplicitParam(name = "usernameIn", value = "所要查找的用户名", required = true, dataTypeClass = String.class)
+    @GetMapping("/getUserListByUsernameFuzzy/{usernameIn}")
+    public Result<Object> getUserListByUsernameFuzzy(@PathVariable String usernameIn) {
+        if (usernameIn != null) {
+            return ResultGenerator.genSuccessResult(userService.getUserListByUsernameFuzzy(usernameIn));
+        }
+        return ResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
+    }
+
+
     @ApiOperation(value = "按照登录名（loginName）筛选查询指定一条记录")
+    @ApiImplicitParam(name = "loginName", value = "登录名", required = true, dataTypeClass = String.class)
     @GetMapping("/getUserByLoginName")
     public Result<Object> getUserByLoginName(@RequestParam String loginName){
         if (loginName != null){
@@ -77,14 +84,6 @@ public class UserController {
     }
 
 
-    /**
-     * 新增一条记录
-     *
-     * @author PancakeCN
-     * @date 2022/2/21 10:42
-     * @param userP String 用户
-     * @return java.lang.Boolean
-     */
     @ApiOperation(value = "新增一条记录", notes = "")
     @ApiImplicitParam(name = "userP", value = "登录参数", required = true,
             dataType = "com.pancake.monitorbe.controller.param.UserParam")
@@ -100,14 +99,7 @@ public class UserController {
         }
     }
 
-    /**
-     * 修改一条记录
-     *
-     * @author PancakeCN
-     * @date 2022/2/21 11:13
-     * @param userP 用户参数
-     * @return java.lang.Boolean
-     */
+
     @ApiOperation(value = "修改一条记录", notes = "")
     @ApiImplicitParam(name="userP", value = "用户参数", required = true,
             dataType = "com.pancake.monitorbe.controller.param.UserParam")
@@ -123,16 +115,9 @@ public class UserController {
         }
     }
 
-    /**
-     * 删除一条记录
-     *
-     * @author PancakeCN
-     * @date 2022/2/21 11:20
-     * @param loginName String 登录名
-     * @return java.lang.Boolean
-     */
+
     @ApiOperation(value = "删除一条记录", notes = "")
-    @ApiImplicitParam(name = "loginName", value = "用户名", required = true, dataType = "String")
+    @ApiImplicitParam(name = "loginName", value = "用户名", required = true, dataTypeClass = String.class)
     @DeleteMapping("/deleteOneUser/{loginName}")
     public Result<Object> deleteOneUser(@PathVariable String loginName){
         if (!StringUtils.hasText(loginName)){

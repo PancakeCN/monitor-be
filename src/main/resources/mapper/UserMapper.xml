@@ -18,11 +18,11 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-       login_name,username,password,auth,phone_number
+       login_name, username, password, auth, phone_number
     </sql>
 
-    <sql id="Selective_Column_List">
-        login_name,username,auth,phone_number
+    <sql id="UserResult_Column_List">
+        login_name, username, password, auth, auth_comment, phone_number
     </sql>
 
 <!--
@@ -36,7 +36,8 @@
     通过主键获取一条用户信息
 -->
     <select id="getOneUserByPrimaryKey" parameterType="String" resultMap="UserResultMap">
-        select * from monitor.view_user where login_name = #{loginName}
+        select <include refid="UserResult_Column_List"/>
+        from monitor.view_user where login_name = #{loginName}
     </select>
 
 <!--
@@ -44,6 +45,14 @@
 -->
     <select id="getNormalLoginNameList" resultType="String">
         select login_name from monitor.view_user where auth = 1
+    </select>
+
+<!--
+    通过username模糊查询用户列表
+-->
+    <select id="getUserListByUsernameFuzzy" parameterType="String" resultMap="UserResultMap">
+        select <include refid="UserResult_Column_List"/>
+        from monitor.view_user where username like concat('%', #{usernameIn}, '%')
     </select>
 
 <!--
@@ -138,6 +147,7 @@
                 phone_number = #{phoneNumber, jdbcType=VARCHAR},
             </if>
         </set>
+        where login_name = #{loginName, jdbcType=VARCHAR}
     </update>
 
 <!--

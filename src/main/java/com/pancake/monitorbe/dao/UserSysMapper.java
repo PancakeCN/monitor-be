@@ -38,7 +38,7 @@ public interface UserSysMapper {
 
 
     /**
-     * 通过主键删除一条记录
+     * 通过主键删除一条/多条记录
      *
      * @param loginName 登录名
      * @return int

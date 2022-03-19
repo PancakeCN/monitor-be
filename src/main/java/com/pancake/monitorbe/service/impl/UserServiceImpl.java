@@ -13,7 +13,6 @@ import com.pancake.monitorbe.model.UserSysResult;
 import com.pancake.monitorbe.service.UserService;
 import com.pancake.monitorbe.util.NumberUtil;
 import com.pancake.monitorbe.util.SystemUtil;
-import com.sun.xml.internal.bind.v2.TODO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -88,6 +87,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ArrayList<UserParam> getUserListByUsernameFuzzy(String usernameIn) {
+        ArrayList<UserResult> fuzzyUserList = userMapper.getUserListByUsernameFuzzy(usernameIn);
+
+        return getUserParamList(fuzzyUserList);
+    }
+
+    @Override
     public UserParam getOneUserFullByLoginName(String loginName) {
         //获取原始部分user
         UserResult oneUser = userMapper.getOneUserByPrimaryKey(loginName);
@@ -97,21 +103,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int insertOneUserFull(UserParam userP) {
+        //FIXME 插入操作
         boolean flag = false;
         HashMap<UserResult, ArrayList<UserSysResult>> splitRes = splitOneUserParam(userP);
         for (Map.Entry<UserResult, ArrayList<UserSysResult>> entry : splitRes.entrySet()) {
-            if (entry.getValue() != null) {
-                //当为普通用户时（ArrayList<UserSysResult>不为空）
-                //检查表tb_sys中是否存在系统识别码
-                if (checkIfExitsSysCode(entry.getValue())) {
+            if (entry.getKey().getAuth() == 1) {
+                //当为普通用户时
+                //1.若为普通用户时，未勾选所管理的系统，直接错误返回  2.检查表tb_sys中是否存在系统识别码（避免传入本不存在的sys）
+                if (entry.getValue() == null || checkIfExitsSysCode(entry.getValue())) {
                     flag = false;
                     break;
                 }
+                //插入tb_user一条记录
                 flag = userMapper.insertSelective(userResultToUser(entry.getKey())) > 0
-                        && userSysMapper.insertBatch(userSysResultToUserSys(
-                        entry.getValue(), entry.getKey().getLoginName())) > 0;
+                        //插入tb_user_sys新的 用户-系统 对应关系的记录
+                        && userSysMapper.insertBatch(userSysResultToUserSys(entry.getValue(), entry.getKey().getLoginName())) > 0;
             }else {
-                //当为管理员时（ArrayList<UserSysResult>为空）
+                //当为管理员时
                 flag = userMapper.insertSelective(userResultToUser(entry.getKey())) > 0;
             }
         }
@@ -127,9 +135,46 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateOneUserFull(UserParam userP) {
-        //TODO 完善更新操作。注：更新tb_sys时会涉及删除操作。 同时删除tb_user_token中的值。
-        //FIXME
-        return 0;
+        //TODO 完善更新操作。注：更新tb_user_sys时会涉及删除操作。 同时删除tb_user_token中的值。
+        //FIXME 更新操作
+        boolean flag = false;
+        HashMap<UserResult, ArrayList<UserSysResult>> splitRes = splitOneUserParam(userP);
+        for (Map.Entry<UserResult, ArrayList<UserSysResult>> entry : splitRes.entrySet()) {
+            if (entry.getKey().getAuth() == 1) {
+                //当为普通用户时（ArrayList<UserSysResult>不为空）
+                //1.若为普通用户时，未勾选所管理的系统，直接错误返回  2.检查表tb_sys中是否存在系统识别码（避免传入本不存在的sys）
+                if (entry.getValue() == null || checkIfExitsSysCode(entry.getValue())) {
+                    flag = false;
+                    break;
+                }
+                //删除tb_user_sys中原来的 用户-系统 对应关系的记录
+                flag = userSysMapper.deleteByPrimaryKey(entry.getKey().getLoginName()) > 0 &&
+                        //插入tb_user_sys新的 用户-系统 对应关系的记录
+                        userSysMapper.insertBatch(userSysResultToUserSys(entry.getValue(), entry.getKey().getLoginName())) > 0 &&
+                        //更新tb_user一条记录
+                        userMapper.updateByPrimaryKeySelective(userResultToUser(entry.getKey())) > 0;
+
+                if (userTokenMapper.selectByPrimaryKey(entry.getKey().getLoginName()) != null) {
+                    //若存在，则删除tb_user_token中的token记录
+                    flag = flag && userTokenMapper.deleteByPrimaryKey(entry.getKey().getLoginName()) > 0;
+                }
+            }else {
+                //当为管理员时（ArrayList<UserSysResult>为空）
+                flag = userMapper.updateByPrimaryKeySelective(userResultToUser(entry.getKey())) > 0;
+
+                if (userTokenMapper.selectByPrimaryKey(entry.getKey().getLoginName()) != null) {
+                    //若存在，则删除tb_user_token中的token记录
+                    flag = flag && userTokenMapper.deleteByPrimaryKey(entry.getKey().getLoginName()) > 0;
+                }
+            }
+        }
+        if (flag){
+            //更新成功
+            return 1;
+        }else {
+            //更新失败
+            return 0;
+        }
     }
 
     @Override
