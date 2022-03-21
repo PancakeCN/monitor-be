@@ -20,10 +20,37 @@
         select sys_code from monitor.tb_sys where sys_code = #{sysCode, jdbcType=VARCHAR}
     </select>
 
-<!--    <insert id="insertSys" parameterType="com.pancake.monitorbe.entity.Sys">-->
-<!--        insert into monitor.tb_user(login_name,username,password,auth,phone_number)-->
-<!--        values(#{loginName},#{username},#{password},#{auth},#{phoneNumber})-->
-<!--    </insert>-->
+    <insert id="insertSelective" parameterType="com.pancake.monitorbe.entity.Sys">
+        insert into monitor.tb_sys
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sysCode != null">
+                sys_code,
+            </if>
+            <if test="sysName != null">
+                sys_name,
+            </if>
+            <if test="sysNameAbbr != null">
+                sys_name_abbr,
+            </if>
+            <if test="tmCount != null">
+                tm_count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sysCode != null">
+                #{sysCode, jdbcType=VARCHAR},
+            </if>
+            <if test="sysName != null">
+                #{sysName, jdbcType=VARCHAR},
+            </if>
+            <if test="sysNameAbbr != null">
+                #{sysNameAbbr, jdbcType=VARCHAR},
+            </if>
+            <if test="tmCount != null">
+                #{tmCount, jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
 <!--    <update id="updatedSys" parameterType="com.pancake.monitorbe.entity.Sys">-->
 <!--        update monitor.tb_user-->

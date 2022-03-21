@@ -31,9 +31,18 @@ public interface SysMapper {
      */
     String checkIfExitsSysCode(String sysCode);
 
-    int insertOneSystem();
+    /**
+     * 选择性插入一条数据
+     *
+     * @param sysIn Sys
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/21 13:02
+     */
+    int insertSelective(Sys sysIn);
 
     int updateOneSystem();
 
     int deleteOneSystem();
+
 }

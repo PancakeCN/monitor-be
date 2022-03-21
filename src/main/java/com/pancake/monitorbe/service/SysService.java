@@ -1,5 +1,6 @@
 package com.pancake.monitorbe.service;
 
+import com.pancake.monitorbe.controller.param.SysParam;
 import com.pancake.monitorbe.entity.Sys;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +24,15 @@ public interface SysService {
      * @date 2022/3/14 16:01
      */
     ArrayList<Sys> getAllSystemList();
+
+
+    /**
+     * 新增一个系统
+     *
+     * @param sysP 系统参数
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/21 12:50
+     */
+    int insertOneSys(SysParam sysP);
 }
