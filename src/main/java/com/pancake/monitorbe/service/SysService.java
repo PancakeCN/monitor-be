@@ -25,6 +25,16 @@ public interface SysService {
      */
     ArrayList<Sys> getAllSystemList();
 
+    /**
+     * 通过系统名模糊查找系统
+     *
+     * @param sysNameIn 待查找的系统名
+     * @return java.util.ArrayList<com.pancake.monitorbe.entity.Sys>
+     * @author PancakeCN
+     * @date 2022/3/22 16:05
+     */
+    ArrayList<Sys> getSysListBySysNameFuzzy(String sysNameIn);
+
 
     /**
      * 新增一个系统
@@ -35,4 +45,24 @@ public interface SysService {
      * @date 2022/3/21 12:50
      */
     int insertOneSys(SysParam sysP);
+
+    /**
+     * 修改一个系统
+     *
+     * @param sysP 系统参数
+     * @return boolean
+     * @author PancakeCN
+     * @date 2022/3/22 17:24
+     */
+    int updateOneSys(SysParam sysP);
+
+    /**
+     * 按照系统识别码删除一条系统记录
+     *
+     * @param sysCodeIn 待删除的系统识别码
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/23 21:16
+     */
+    int deleteOneSys(String sysCodeIn);
 }

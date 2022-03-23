@@ -28,8 +28,26 @@ public class SysServiceImpl implements SysService {
     }
 
     @Override
+    public ArrayList<Sys> getSysListBySysNameFuzzy(String sysNameIn) {
+        return sysMapper.getSysListBySysNameFuzzy(sysNameIn);
+    }
+
+    @Override
     public int insertOneSys(SysParam sysP) {
+        //初始化时候，tmCount为0
+        sysP.setTmCount(0);
         return sysMapper.insertSelective(sysParamToSys(sysP));
+    }
+
+    @Override
+    public int updateOneSys(SysParam sysP) {
+        return sysMapper.updateOneSystemSelective(sysParamToSys(sysP));
+    }
+
+    @Override
+    public int deleteOneSys(String sysCodeIn) {
+        //TODO 删除系统待完善。需要多多个表进行操作！
+        return 0;
     }
 
     /**
@@ -42,6 +60,7 @@ public class SysServiceImpl implements SysService {
      */
     private Sys sysParamToSys(SysParam sysP) {
         return new Sys(sysP.getSysCode(), sysP.getSysName(),
+                //初始化创建系统，所属的终端总数应当默认为0
                 sysP.getSysNameAbbr(), sysP.getTmCount());
     }
 }

@@ -37,7 +37,7 @@
 -->
     <select id="getOneUserByPrimaryKey" parameterType="String" resultMap="UserResultMap">
         select <include refid="UserResult_Column_List"/>
-        from monitor.view_user where login_name = #{loginName}
+        from monitor.view_user where login_name = #{loginName, jdbcType=VARCHAR}
     </select>
 
 <!--
@@ -51,8 +51,8 @@
     通过username模糊查询用户列表
 -->
     <select id="getUserListByUsernameFuzzy" parameterType="String" resultMap="UserResultMap">
-        select <include refid="UserResult_Column_List"/>
-        from monitor.view_user where username like concat('%', #{usernameIn}, '%')
+        select <include refid="UserResult_Column_List"/> from monitor.view_user
+        where username like concat('%', #{usernameIn, jdbcType=VARCHAR}, '%')
     </select>
 
 <!--
@@ -62,7 +62,7 @@
         select
         <include refid="Base_Column_List"/>
         from monitor.tb_user
-        where login_name = #{loginName} and password = #{password}
+        where login_name = #{loginName, jdbcType=VARCHAR} and password = #{password, jdbcType=VARCHAR}
     </select>
 
 <!--
@@ -70,7 +70,8 @@
 -->
     <insert id="insert" parameterType="com.pancake.monitorbe.entity.User">
         insert into monitor.tb_user(login_name,username,password,auth,phone_number)
-        values(#{loginName},#{username},#{password},#{auth},#{phoneNumber})
+        values(#{loginName, jdbcType=VARCHAR},#{username, jdbcType=VARCHAR},#{password, jdbcType=VARCHAR},
+               #{auth, jdbcType=INTEGER},#{phoneNumber, jdbcType=VARCHAR})
     </insert>
 
 <!--
@@ -120,8 +121,8 @@
     <update id="updateByPrimaryKey" parameterType="com.pancake.monitorbe.entity.User">
         update monitor.tb_user
         set
-            login_name=#{loginName},username=#{username},password=#{password},
-            auth=#{auth},phone_number=#{phoneNumber}
+            login_name=#{loginName, jdbcType=VARCHAR},username=#{username, jdbcType=VARCHAR},password=#{password, jdbcType=VARCHAR},
+            auth=#{auth, jdbcType=INTEGER},phone_number=#{phoneNumber, jdbcType=VARCHAR}
         where login_name=#{loginName}
     </update>
 
@@ -154,6 +155,6 @@
     通过主键删除一条用户数据
 -->
     <delete id="deleteByPrimaryKey" parameterType="String">
-        delete from monitor.tb_user where login_name=#{loginName}
+        delete from monitor.tb_user where login_name=#{loginName, jdbcType=VARCHAR}
     </delete>
 </mapper>

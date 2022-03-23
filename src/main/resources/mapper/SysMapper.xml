@@ -10,16 +10,29 @@
     <sql id="Base_Column_List">
         sys_code, sys_name, sys_name_abbr, tm_count
     </sql>
-
+<!--
+    查询所有系统列表
+-->
     <select id="getAllSystemList" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/> from monitor.tb_sys
         order by sys_code desc
     </select>
-
+<!--
+    按照系统名模糊查询系统列表
+-->
+    <select id="getSysListBySysNameFuzzy" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from monitor.tb_sys
+        where sys_name like concat('%', #{sysNameIn, jdbcType=VARCHAR}, '%')
+    </select>
+<!--
+    检查是否存在某一 sysCode（用于新建/修改用户信息UserParam）
+-->
     <select id="checkIfExitsSysCode" parameterType="String" resultType="String">
         select sys_code from monitor.tb_sys where sys_code = #{sysCode, jdbcType=VARCHAR}
     </select>
-
+<!--
+    选择性插入一条数据
+-->
     <insert id="insertSelective" parameterType="com.pancake.monitorbe.entity.Sys">
         insert into monitor.tb_sys
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -52,13 +65,24 @@
         </trim>
     </insert>
 
-<!--    <update id="updatedSys" parameterType="com.pancake.monitorbe.entity.Sys">-->
-<!--        update monitor.tb_user-->
-<!--        set-->
-<!--            login_name=#{loginName},username=#{username},password=#{password},-->
-<!--            auth=#{auth},phone_number=#{phoneNumber}-->
-<!--        where login_name=#{loginName}-->
-<!--    </update>-->
+    <update id="updateOneSystemSelective" parameterType="com.pancake.monitorbe.entity.Sys">
+        update monitor.tb_sys
+        <set>
+            <if test="sysCode != null">
+                sys_code = #{sysCode, jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                sys_name = #{sysName, jdbcType=VARCHAR},
+            </if>
+            <if test="sysNameAbbr != null">
+                sys_name_abbr = #{sysNameAbbr, jdbcType=VARCHAR},
+            </if>
+            <if test="tmCount != null">
+                tm_count = #{tmCount, jdbcType=INTEGER},
+            </if>
+        </set>
+        where sys_code = #{sysCode, jdbcType=VARCHAR}
+    </update>
 
 <!--    <delete id="deleteSys" parameterType="String">-->
 <!--        delete from monitor.tb_user where login_name=#{loginName}-->

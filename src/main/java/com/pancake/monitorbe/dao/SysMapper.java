@@ -22,6 +22,16 @@ public interface SysMapper {
     ArrayList<Sys> getAllSystemList();
 
     /**
+     * 通过系统名模糊查找系统
+     *
+     * @param sysNameIn 待查找的系统名
+     * @return java.util.ArrayList<com.pancake.monitorbe.entity.Sys>
+     * @author PancakeCN
+     * @date 2022/3/22 16:08
+     */
+    ArrayList<Sys> getSysListBySysNameFuzzy(String sysNameIn);
+
+    /**
      * 检查是否存在某一 sysCode（用于新建/修改用户信息UserParam）
      *
      * @param sysCode 系统识别码
@@ -41,8 +51,15 @@ public interface SysMapper {
      */
     int insertSelective(Sys sysIn);
 
-    int updateOneSystem();
+    /**
+     * 更新一条数据
+     *
+     * @param sysIn Sys
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/23 20:28
+     */
+    int updateOneSystemSelective(Sys sysIn);
 
     int deleteOneSystem();
-
 }

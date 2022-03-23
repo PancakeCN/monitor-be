@@ -65,8 +65,8 @@ public class UserController {
 
     @ApiOperation(value = "按照用户名模糊查询一条/多条记录")
     @ApiImplicitParam(name = "usernameIn", value = "所要查找的用户名", required = true, dataTypeClass = String.class)
-    @GetMapping("/getUserListByUsernameFuzzy/{usernameIn}")
-    public Result<Object> getUserListByUsernameFuzzy(@PathVariable String usernameIn) {
+    @GetMapping("/getUserListByUsernameFuzzy")
+    public Result<Object> getUserListByUsernameFuzzy(@RequestParam String usernameIn) {
         if (usernameIn != null) {
             return ResultGenerator.genSuccessResult(userService.getUserListByUsernameFuzzy(usernameIn));
         }

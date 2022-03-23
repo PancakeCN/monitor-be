@@ -21,5 +21,5 @@ public class Sys {
     /**系统名缩写*/
     private String sysNameAbbr;
     /**终端数*/
-    private String tmCount;
+    private int tmCount;
 }
