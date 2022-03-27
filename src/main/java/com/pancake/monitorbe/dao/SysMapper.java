@@ -61,5 +61,13 @@ public interface SysMapper {
      */
     int updateOneSystemSelective(Sys sysIn);
 
-    int deleteOneSystem();
+    /**
+     * 删除一个系统
+     *
+     * @param sysCodeIn 待删除的sysCode
+     * @return int
+     * @author PancakeCN
+     * @date 2022/3/23 23:52
+     */
+    int deleteOneSystem(String sysCodeIn);
 }

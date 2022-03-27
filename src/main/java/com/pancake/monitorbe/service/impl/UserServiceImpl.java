@@ -103,7 +103,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int insertOneUserFull(UserParam userP) {
-        //FIXME 插入操作
         boolean flag = false;
         HashMap<UserResult, ArrayList<UserSysResult>> splitRes = splitOneUserParam(userP);
         for (Map.Entry<UserResult, ArrayList<UserSysResult>> entry : splitRes.entrySet()) {
@@ -111,6 +110,7 @@ public class UserServiceImpl implements UserService {
                 //当为普通用户时
                 //1.若为普通用户时，未勾选所管理的系统，直接错误返回  2.检查表tb_sys中是否存在系统识别码（避免传入本不存在的sys）
                 if (entry.getValue() == null || checkIfExitsSysCode(entry.getValue())) {
+                    log.error("出现错误！可能原因：1.普通用户权限下未分配所管理的系统；2.给定的sys_code在系统表中不存在。");
                     flag = false;
                     break;
                 }
@@ -135,8 +135,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateOneUserFull(UserParam userP) {
-        //TODO 完善更新操作。注：更新tb_user_sys时会涉及删除操作。 同时删除tb_user_token中的值。
-        //FIXME 更新操作
         boolean flag = false;
         HashMap<UserResult, ArrayList<UserSysResult>> splitRes = splitOneUserParam(userP);
         for (Map.Entry<UserResult, ArrayList<UserSysResult>> entry : splitRes.entrySet()) {
@@ -144,6 +142,7 @@ public class UserServiceImpl implements UserService {
                 //当为普通用户时（ArrayList<UserSysResult>不为空）
                 //1.若为普通用户时，未勾选所管理的系统，直接错误返回  2.检查表tb_sys中是否存在系统识别码（避免传入本不存在的sys）
                 if (entry.getValue() == null || checkIfExitsSysCode(entry.getValue())) {
+                    log.error("出现错误！可能原因：1.普通用户权限下未分配所管理的系统；2.给定的sys_code在系统表中不存在。");
                     flag = false;
                     break;
                 }

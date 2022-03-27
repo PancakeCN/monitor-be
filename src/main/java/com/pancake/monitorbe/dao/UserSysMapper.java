@@ -26,6 +26,16 @@ public interface UserSysMapper {
     ArrayList<UserSysResult> getAllUserSysListByLoginName(String loginName);
 
     /**
+     * 通过sysCode查询数据
+     *
+     * @param sysCodeIn 待查找的sysCode
+     * @return java.util.ArrayList<com.pancake.monitorbe.entity.UserSys>
+     * @author PancakeCN
+     * @date 2022/3/24 0:06
+     */
+    ArrayList<UserSys> getUserSysListBySysCode(String sysCodeIn);
+
+    /**
      * 选择性批量插入数据
      *
      * @param list 待插入数据列表

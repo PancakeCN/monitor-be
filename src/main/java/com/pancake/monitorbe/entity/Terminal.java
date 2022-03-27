@@ -1,6 +1,9 @@
 package com.pancake.monitorbe.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 终端实体类
@@ -8,7 +11,10 @@ import lombok.Data;
  * @author PancakeCN
  * @date 2022/3/2 1:35
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@ToString
 public class Terminal {
     /**系统识别码*/
     private String sysCode;

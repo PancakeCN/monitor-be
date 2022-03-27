@@ -99,6 +99,14 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
+        <Logger name="_org.springframework" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="springfox" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
         <root level="info">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFileInfo"/>

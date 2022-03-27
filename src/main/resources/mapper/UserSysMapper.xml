@@ -12,11 +12,21 @@
     <sql id="Base_Column_List">
         login_name,sys_code
     </sql>
-
+<!--
+    通过登录名获取所有UserSys列表
+-->
     <select id="getAllUserSysListByLoginName" parameterType="String" resultMap="UserSysResultMap">
         select sys_code, sys_name from monitor.view_user_sys where login_name = #{loginName}
     </select>
-
+<!--
+    通过sysCode查询数据
+-->
+    <select id="getUserSysListBySysCode" parameterType="String" resultMap="BaseResultMap">
+        select * from monitor.tb_user_sys where sys_code = #{sysCode, jdbcType=VARCHAR}
+    </select>
+<!--
+    批量插入数据
+-->
     <insert id="insertBatch" parameterType="ArrayList">
         insert into monitor.tb_user_sys(login_name, sys_code)
         values
@@ -24,9 +34,9 @@
             (#{each.loginName, jdbcType=VARCHAR}, #{each.sysCode, jdbcType=VARCHAR})
         </foreach>
     </insert>
-
-
-
+<!--
+    通过主键删除数据
+-->
     <delete id="deleteByPrimaryKey" parameterType="String">
         delete from monitor.tb_user_sys where login_name = #{loginName};
     </delete>

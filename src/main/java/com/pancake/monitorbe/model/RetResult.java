@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author PancakeCN
  * @date 2022/3/2 1:13
  */
-public class Result<T> implements Serializable {
+public class RetResult<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //业务码，比如成功、失败、权限不足等 code，可自行定义
@@ -20,12 +20,12 @@ public class Result<T> implements Serializable {
     private String message;
     //数据结果，泛型，可以是列表、单个对象、数字、布尔值等
     @ApiModelProperty("返回数据")
-    private T data;
+    private T data = null;
 
-    public Result() {
+    public RetResult() {
     }
 
-    public Result(int resultCode, String message) {
+    public RetResult(int resultCode, String message) {
         this.resultCode = resultCode;
         this.message = message;
     }

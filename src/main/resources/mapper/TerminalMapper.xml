@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pancake.monitorbe.dao.TerminalMapper">
-    <resultMap type="com.pancake.monitorbe.entity.Terminal" id="TmResult">
+    <resultMap type="com.pancake.monitorbe.entity.Terminal" id="BaseResultMap">
         <result property="sysCode" jdbcType="VARCHAR" column="sys_code"/>
         <result property="tmCode" jdbcType="VARCHAR" column="tm_code"/>
         <result property="tmName" jdbcType="VARCHAR" column="tm_name"/>
@@ -14,7 +14,7 @@
         <result property="dataStat" jdbcType="INTEGER" column="data_stat"/>
     </resultMap>
 
-    <resultMap type="com.pancake.monitorbe.controller.param.MonitorTerminalParam" id="TmMonitorResult">
+    <resultMap type="com.pancake.monitorbe.controller.param.MonitorTerminalParam" id="TmMonitorResultMap">
         <result property="sysName" jdbcType="VARCHAR" column="sys_name"/>
         <result property="tmName" jdbcType="VARCHAR" column="tm_name"/>
         <result property="tmIp" jdbcType="VARCHAR" column="tm_ip"/>
@@ -22,52 +22,81 @@
         <result property="heartStat" jdbcType="INTEGER" column="heart_stat"/>
         <result property="dataStat" jdbcType="INTEGER" column="data_stat"/>
     </resultMap>
-
-    <select id="getAllTerminals" resultMap="TmResult">
+<!--
+    获取所有终端列表
+-->
+    <select id="getAllTerminals" resultMap="BaseResultMap">
         select * from monitor.tb_terminal
         order by sys_code desc
     </select>
-
-    <select id="getMonitorTerminals" resultMap="TmMonitorResult">
+<!--
+    按照监控页所需格式获取终端列表
+-->
+    <select id="getMonitorTerminals" resultMap="TmMonitorResultMap">
         select ts.sys_name, tm_name, tm_ip, last_update_time, heart_stat, data_stat
         from monitor.tb_sys ts join monitor.tb_terminal tt on ts.sys_code = tt.sys_code
         order by ts.sys_name
     </select>
-
+<!--
+    获取终端总数
+-->
     <select id="getTerminalsCount" resultType="Integer">
         select count(*) from monitor.tb_terminal
     </select>
-
+<!--
+    获取绿色心跳状态记录数
+-->
     <select id="getGreenHeartStatCount" resultType="Integer">
         select count(*) from monitor.tb_terminal
         where heart_stat = 0
     </select>
-
+<!--
+    获取黄色心跳状态记录数
+-->
     <select id="getYellowHeartStatCount" resultType="Integer">
         select count(*) from monitor.tb_terminal
         where heart_stat = 1
     </select>
-
+<!--
+    获取红色心跳状态记录数
+-->
     <select id="getRedHeartStatCount" resultType="Integer">
         select count(*) from monitor.tb_terminal
         where heart_stat = 2
     </select>
-
+<!--
+    获取绿色数据状态记录数
+-->
     <select id="getGreenDataStatCount" resultType="Integer">
         select count(*) from monitor.tb_terminal
         where data_stat = 0
     </select>
-
+<!--
+    获取黄色数据状态记录数
+-->
     <select id="getYellowDataStatCount" resultType="Integer">
         select count(*) from monitor.tb_terminal
         where data_stat = 1
     </select>
-
+<!--
+    获取红色数据状态记录数
+-->
     <select id="getRedDataStatCount" resultType="Integer">
         select count(*) from monitor.tb_terminal
         where data_stat = 2
     </select>
-
+<!--
+    通过sysCode查找终端列表
+-->
+    <select id="getTerminalListBySysCode" parameterType="String" resultMap="BaseResultMap">
+        select * from monitor.tb_terminal where sys_code = #{sysCode, jdbcType=VARCHAR}
+    </select>
+<!--
+    通过tmName模糊查询终端列表
+-->
+    <select id="getTmListByTmNameFuzzy" parameterType="String" resultMap="BaseResultMap">
+        select * from monitor.tb_terminal where tm_name like concat('%', #{tmName, jdbcType=VARCHAR},'%')
+    </select>
     <!--    <insert id="insertSys" parameterType="com.pancake.monitorbe.entity.Sys">-->
     <!--        insert into monitor.tb_user(login_name,username,password,auth,phone_number)-->
     <!--        values(#{loginName},#{username},#{password},#{auth},#{phoneNumber})-->

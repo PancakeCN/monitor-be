@@ -1,8 +1,8 @@
 package com.pancake.monitorbe.controller;
 
+import com.pancake.monitorbe.model.RetResult;
 import com.pancake.monitorbe.service.MonitorService;
-import com.pancake.monitorbe.model.Result;
-import com.pancake.monitorbe.util.ResultGenerator;
+import com.pancake.monitorbe.util.RetResultGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,38 +27,38 @@ public class MonitorController {
 
     @ApiOperation(value = "获取所有终端信息")
     @GetMapping("/getAllTerminals")
-    public Result<Object> getAllTerminals(){
-        return ResultGenerator.genSuccessResult(monitorService.getAllTerminalList());
+    public RetResult<Object> getAllTerminals(){
+        return RetResultGenerator.genSuccessResult(monitorService.getAllTerminalList());
     }
 
     @ApiOperation(value = "获取监控主页所需的终端信息")
     @GetMapping("/getMonitorTerminals")
-    public Result<Object> getMonitorTerminals(){
-        return ResultGenerator.genSuccessResult(monitorService.getMonitorTerminalList());
+    public RetResult<Object> getMonitorTerminals(){
+        return RetResultGenerator.genSuccessResult(monitorService.getMonitorTerminalList());
     }
 
     @ApiOperation(value = "获取所有系统信息")
     @GetMapping("/getAllSystems")
-    public Result<Object> getAllSystems(){
-        return ResultGenerator.genSuccessResult(monitorService.getAllSystemList());
+    public RetResult<Object> getAllSystems(){
+        return RetResultGenerator.genSuccessResult(monitorService.getAllSystemList());
     }
 
     @ApiOperation(value = "获取终端总数")
     @GetMapping("/getTerminalsCount")
-    public Result<Object> getTerminalsCount(){
-        return ResultGenerator.genSuccessResult(monitorService.getTerminalsCount());
+    public RetResult<Object> getTerminalsCount(){
+        return RetResultGenerator.genSuccessResult(monitorService.getTerminalsCount());
     }
 
     @ApiOperation(value = "获取心跳状态统计数")
     @GetMapping("/getHeartStatCount")
-    public Result<Object> getHeartStatCount(){
-        return ResultGenerator.genSuccessResult(monitorService.getHeartStatCount());
+    public RetResult<Object> getHeartStatCount(){
+        return RetResultGenerator.genSuccessResult(monitorService.getHeartStatCount());
     }
 
     @ApiOperation(value = "获取数据状态统计数")
     @GetMapping("/getDataStatCount")
-    public Result<Object> getDataStatCount(){
-        return ResultGenerator.genSuccessResult(monitorService.getDataStatCount());
+    public RetResult<Object> getDataStatCount(){
+        return RetResultGenerator.genSuccessResult(monitorService.getDataStatCount());
     }
 
 }

@@ -1,6 +1,9 @@
 package com.pancake.monitorbe.controller.param;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 终端参数
@@ -9,7 +12,10 @@ import lombok.Data;
  * @link https://github.com/PancakeCN
  * @date 2022/3/14 2:45
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@ToString
 public class TerminalParam {
     /**系统识别码*/
     private String sysCode;

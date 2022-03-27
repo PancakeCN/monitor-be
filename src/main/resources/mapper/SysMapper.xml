@@ -64,14 +64,16 @@
             </if>
         </trim>
     </insert>
-
+<!--
+    选择性更新一条数据
+-->
     <update id="updateOneSystemSelective" parameterType="com.pancake.monitorbe.entity.Sys">
         update monitor.tb_sys
         <set>
             <if test="sysCode != null">
                 sys_code = #{sysCode, jdbcType=VARCHAR},
             </if>
-            <if test="username != null">
+            <if test="sysName != null">
                 sys_name = #{sysName, jdbcType=VARCHAR},
             </if>
             <if test="sysNameAbbr != null">
@@ -83,8 +85,10 @@
         </set>
         where sys_code = #{sysCode, jdbcType=VARCHAR}
     </update>
-
-<!--    <delete id="deleteSys" parameterType="String">-->
-<!--        delete from monitor.tb_user where login_name=#{loginName}-->
-<!--    </delete>-->
+<!--
+    删除一条记录
+-->
+    <delete id="deleteOneSystem" parameterType="String">
+        delete from monitor.tb_sys where sys_code=#{sysCode, jdbcType=VARCHAR}
+    </delete>
 </mapper>
