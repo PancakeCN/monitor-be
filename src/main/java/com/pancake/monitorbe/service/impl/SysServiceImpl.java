@@ -57,6 +57,7 @@ public class SysServiceImpl implements SysService {
 
     @Override
     public int deleteOneSys(String sysCodeIn) {
+        //TODO 删除操作时，还应当考虑tb_workinfo tb_update_hour_count tb_update_day_count tb_update_month_count tb_update_year_count中是否存在sysCode
         boolean flag = false;
         if (!ObjectUtils.isEmpty(terminalMapper.getTerminalListBySysCode(sysCodeIn)) ||
                 !ObjectUtils.isEmpty(userSysMapper.getUserSysListBySysCode(sysCodeIn))) {

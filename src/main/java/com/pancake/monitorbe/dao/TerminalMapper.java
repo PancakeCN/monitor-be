@@ -64,14 +64,16 @@ public interface TerminalMapper {
     ArrayList<Terminal> getTmListByTmNameFuzzy(String tmNameIn);
 
     /**
-     * 插入一条终端
-     * @author PancakeCN
-     * @date 2022/3/2 2:01
+     * 新增一条终端记录
+     *
+     * @param tm 待新增的终端
      * @return int
+     * @author PancakeCN
+     * @date 2022/3/28 17:23
      */
-    int insertOneTerminal();
+    int insertSelective(Terminal tm);
 
-    int updateOneTerminal();
+    int updateByPrimaryKeySelective(Terminal tm);
 
-    int deleteOneTerminal();
+    int deleteByPrimaryKey(String tmCode);
 }

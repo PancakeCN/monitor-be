@@ -3,10 +3,12 @@ package com.pancake.monitorbe.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class User {
     /**用户登录名*/
     private String loginName;

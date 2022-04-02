@@ -32,7 +32,7 @@ public interface SysMapper {
     ArrayList<Sys> getSysListBySysNameFuzzy(String sysNameIn);
 
     /**
-     * 检查是否存在某一 sysCode（用于新建/修改用户信息UserParam）
+     * 检查是否存在某一 sysCode（用于新建/修改用户信息UserParam，修改/新增Terminal）
      *
      * @param sysCode 系统识别码
      * @return java.lang.String

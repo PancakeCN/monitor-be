@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pancake.monitorbe.dao.WorkinfoMapper">
+    <resultMap type="com.pancake.monitorbe.entity.WorkInfo" id="BaseResultMap">
+        <id property="id" jdbcType="INTEGER" column="id"/>
+        <result property="sysCode" jdbcType="VARCHAR" column="sys_code"/>
+        <result property="tmCode" jdbcType="VARCHAR" column="tm_code"/>
+        <result property="workInfo" jdbcType="VARCHAR" column="work_info"/>
+        <result property="workIp" jdbcType="VARCHAR" column="work_ip"/>
+        <result property="updateTime" jdbcType="TIMESTAMP" column="updateTime"/>
+    </resultMap>
+
+<!--    <resultMap type="com.pancake.monitorbe.controller.param.MonitorTerminalParam" id="TmMonitorResultMap">-->
+<!--        <id property="id" jdbcType="INTEGER" column="id"/>-->
+<!--        <result property="sysCode" jdbcType="VARCHAR" column="sys_code"/>-->
+<!--        <result property="tmCode" jdbcType="VARCHAR" column="tm_code"/>-->
+<!--        <result property="workInfo" jdbcType="VARCHAR" column="work_info"/>-->
+<!--        <result property="workIp" jdbcType="VARCHAR" column="work_ip"/>-->
+<!--        <result property="updateTime" jdbcType="TIMESTAMP" column="updateTime"/>-->
+<!--    </resultMap>-->
+    <!--
+        按照sysCode和tmCode获取列表
+    -->
+    <select id="getListByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
+        select * from monitor.tb_workinfo
+        where sys_code = #{sysCodeIn, jdbcType=VARCHAR} and tm_code = #{tmCodeIn, jdbcType=VARCHAR}
+    </select>
+    <!--
+        按照sysCode获取列表
+    -->
+    <select id="getListBySysCode" parameterType="String" resultMap="BaseResultMap">
+        select * from monitor.tb_workinfo
+        where sys_code = #{sysCodeIn, jdbcType=VARCHAR}
+    </select>
+<!--    &lt;!&ndash;-->
+<!--        获取终端总数-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getTerminalsCount" resultType="Integer">-->
+<!--        select count(*) from monitor.tb_terminal-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        获取绿色心跳状态记录数-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getGreenHeartStatCount" resultType="Integer">-->
+<!--        select count(*) from monitor.tb_terminal-->
+<!--        where heart_stat = 0-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        获取黄色心跳状态记录数-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getYellowHeartStatCount" resultType="Integer">-->
+<!--        select count(*) from monitor.tb_terminal-->
+<!--        where heart_stat = 1-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        获取红色心跳状态记录数-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getRedHeartStatCount" resultType="Integer">-->
+<!--        select count(*) from monitor.tb_terminal-->
+<!--        where heart_stat = 2-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        获取绿色数据状态记录数-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getGreenDataStatCount" resultType="Integer">-->
+<!--        select count(*) from monitor.tb_terminal-->
+<!--        where data_stat = 0-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        获取黄色数据状态记录数-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getYellowDataStatCount" resultType="Integer">-->
+<!--        select count(*) from monitor.tb_terminal-->
+<!--        where data_stat = 1-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        获取红色数据状态记录数-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getRedDataStatCount" resultType="Integer">-->
+<!--        select count(*) from monitor.tb_terminal-->
+<!--        where data_stat = 2-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        通过sysCode查找终端列表-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getTerminalListBySysCode" parameterType="String" resultMap="BaseResultMap">-->
+<!--        select * from monitor.tb_terminal where sys_code = #{sysCode, jdbcType=VARCHAR}-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        通过tmName模糊查询终端列表-->
+<!--    &ndash;&gt;-->
+<!--    <select id="getTmListByTmNameFuzzy" parameterType="String" resultMap="BaseResultMap">-->
+<!--        select * from monitor.tb_terminal where tm_name like concat('%', #{tmName, jdbcType=VARCHAR},'%')-->
+<!--    </select>-->
+<!--    &lt;!&ndash;-->
+<!--        选择性新增一条终端记录-->
+<!--    &ndash;&gt;-->
+<!--    <insert id="insertSelective" parameterType="com.pancake.monitorbe.entity.Terminal">-->
+<!--        insert into monitor.tb_terminal-->
+<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+<!--            <if test="sysCode != null">-->
+<!--                sys_code,-->
+<!--            </if>-->
+<!--            <if test="tmCode != null">-->
+<!--                tm_code,-->
+<!--            </if>-->
+<!--            <if test="tmName != null">-->
+<!--                tm_name,-->
+<!--            </if>-->
+<!--            <if test="tmIp != null">-->
+<!--                tm_ip,-->
+<!--            </if>-->
+<!--            <if test="lastUpdateTime != null">-->
+<!--                last_update_time,-->
+<!--            </if>-->
+<!--            <if test="redWarnPeriod != null">-->
+<!--                red_warn_period,-->
+<!--            </if>-->
+<!--            <if test="yellowWarnPeriod != null">-->
+<!--                yellow_warn_period,-->
+<!--            </if>-->
+<!--            <if test="heartStat != null">-->
+<!--                heart_stat,-->
+<!--            </if>-->
+<!--            <if test="heartPeriod != null">-->
+<!--                heart_period,-->
+<!--            </if>-->
+<!--            <if test="dataStat != null">-->
+<!--                data_stat,-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--        <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+<!--            <if test="sysCode != null">-->
+<!--                #{sysCode, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tmCode != null">-->
+<!--                #{tmCode, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tmName != null">-->
+<!--                #{tmName, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tmIp != null">-->
+<!--                #{tmIp, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="lastUpdateTime != null">-->
+<!--                #{lastUpdateTime, jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="redWarnPeriod != null">-->
+<!--                #{redWarnPeriod, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="yellowWarnPeriod != null">-->
+<!--                #{yellowWarnPeriod, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="heartStat != null">-->
+<!--                #{heartStat, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="heartPeriod != null">-->
+<!--                #{heartPeriod, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="dataStat != null">-->
+<!--                #{dataStat, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--    </insert>-->
+<!--    &lt;!&ndash;-->
+<!--        按主键选择性更新一条终端记录-->
+<!--    &ndash;&gt;-->
+<!--    <update id="updateByPrimaryKeySelective" parameterType="com.pancake.monitorbe.entity.Terminal">-->
+<!--        update monitor.tb_terminal-->
+<!--        <set>-->
+<!--            <if test="sysCode != null">-->
+<!--                sys_code = #{sysCode, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tmCode != null">-->
+<!--                tm_code = #{tmCode, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tmName != null">-->
+<!--                tm_name = #{tmName, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="tmIp != null">-->
+<!--                tm_ip = #{tmIp, jdbcType=VARCHAR},-->
+<!--            </if>-->
+<!--            <if test="lastUpdateTime != null">-->
+<!--                last_update_time = #{lastUpdateTime, jdbcType=TIMESTAMP},-->
+<!--            </if>-->
+<!--            <if test="redWarnPeriod != null">-->
+<!--                red_warn_period = #{redWarnPeriod, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="yellowWarnPeriod != null">-->
+<!--                yellow_warn_period = #{yellowWarnPeriod, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="heartStat != null">-->
+<!--                heart_stat = #{heartStat, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="heartPeriod != null">-->
+<!--                heart_period = #{heartPeriod, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--            <if test="dataStat != null">-->
+<!--                data_stat = #{dataStat, jdbcType=INTEGER},-->
+<!--            </if>-->
+<!--        </set>-->
+<!--        where tm_code = #{tmCode, jdbcType=VARCHAR}-->
+<!--    </update>-->
+<!--    &lt;!&ndash;-->
+<!--        按主键删除一条终端数据-->
+<!--    &ndash;&gt;-->
+<!--    <delete id="deleteByPrimaryKey" parameterType="String">-->
+<!--        delete from monitor.tb_terminal where tm_code = #{tmCode. jdbcType=VARCHAR}-->
+<!--    </delete>-->
+</mapper>

@@ -77,30 +77,35 @@ public class TerminalController {
         return RetResultGenerator.genSuccessResult(retMsg);
     }
 
-//    @ApiOperation(value = "修改一条终端记录")
-//    @PutMapping("/updateOneTerminal")
-//    public RetResult<String> updateOneTerminal(@RequestBody SysParam tmP) {
-//        if (ObjectUtils.isEmpty(tmP)) {
-//            return RetResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
-//        }else {
-//            if (terminalService.updateOneTerminal(tmP) > 0) {
-//                return RetResultGenerator.genSuccessResult("记录修改成功！");
-//            }else {
-//                return RetResultGenerator.genFailResult("内部错误！记录新增失败！");
-//            }
-//        }
-//    }
-//
-//    @ApiOperation(value = "删除一条终端记录")
-//    @DeleteMapping("/deleteOneTerminal")
-//    public RetResult<String> deleteOneTerminal(@RequestParam String tmCodeIn) {
-//        if (!StringUtils.hasText(tmCodeIn)){
-//            return RetResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
-//        }else {
-//            if (terminalService.deleteOneTerminal(tmCodeIn) > 0){
-//                return RetResultGenerator.genSuccessResult("记录删除成功！");
-//            }
-//            return RetResultGenerator.genFailResult("内部错误！记录删除失败！");
-//        }
-//    }
+    @ApiOperation(value = "修改一条终端记录")
+    @PutMapping("/updateOneTerminal")
+    public RetResult<String> updateOneTerminal(@RequestBody TerminalParam tmP) {
+        String retMsg;
+        try {
+            retMsg = terminalService.updateOneTerminal(tmP);
+        } catch (ErrorMsgException e) {
+            log.error("修改一条终端记录过程中错误：{}", e.getMessage());
+            return RetResultGenerator.genFailResult(e.getMessage());
+        } catch (Exception e) {
+            log.error("抛出异常：{}", e.getMessage());
+            return RetResultGenerator.genFailResult(e.getMessage());
+        }
+        return RetResultGenerator.genSuccessResult(retMsg);
+    }
+
+    @ApiOperation(value = "删除一条终端记录")
+    @DeleteMapping("/deleteOneTerminal")
+    public RetResult<String> deleteOneTerminal(@RequestParam String sysCodeIn, @RequestParam String tmCodeIn) {
+        String retMsg;
+        try {
+            retMsg = terminalService.deleteOneTerminal(sysCodeIn, tmCodeIn);
+        } catch (ErrorMsgException e) {
+            log.error("删除一条终端记录过程中错误：{}", e.getMessage());
+            return RetResultGenerator.genFailResult(e.getMessage());
+        } catch (Exception e) {
+            log.error("抛出异常：{}", e.getMessage());
+            return RetResultGenerator.genFailResult(e.getMessage());
+        }
+        return RetResultGenerator.genSuccessResult(retMsg);
+    }
 }

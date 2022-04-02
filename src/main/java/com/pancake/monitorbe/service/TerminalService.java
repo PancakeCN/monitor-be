@@ -44,4 +44,25 @@ public interface TerminalService {
      * @date 2022/3/27 15:00
      */
     String insertOneTerminal(TerminalParam tmP);
+
+    /**
+     * 更新一条终端信息
+     *
+     * @param tmP 终端参数
+     * @return java.lang.String
+     * @author PancakeCN
+     * @date 2022/3/29 15:57
+     */
+    String updateOneTerminal(TerminalParam tmP);
+    
+    /**
+     * 删除一条终端信息
+     *
+     * @param sysCodeIn 待删除的系统号
+     * @param tmCodeIn 待删除的终端号
+     * @return java.lang.String
+     * @author PancakeCN
+     * @date 2022/3/31 19:13
+     */
+    String deleteOneTerminal(String sysCodeIn, String tmCodeIn);
 }

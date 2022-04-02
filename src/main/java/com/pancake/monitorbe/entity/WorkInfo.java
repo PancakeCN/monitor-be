@@ -1,6 +1,9 @@
 package com.pancake.monitorbe.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 工作信息状态
@@ -9,7 +12,10 @@ import lombok.Data;
  * @link https://github.com/PancakeCN
  * @date 2022/3/12 17:09
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@ToString
 public class WorkInfo {
 
     /**id值*/

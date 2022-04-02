@@ -1,6 +1,9 @@
 package com.pancake.monitorbe.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -8,7 +11,10 @@ import java.util.Date;
  * @author PancakeCN
  * @date 2022/3/3 21:03
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@ToString
 public class UserToken {
 
     /**用户登录名*/

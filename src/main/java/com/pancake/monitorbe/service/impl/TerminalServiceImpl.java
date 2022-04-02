@@ -1,8 +1,7 @@
 package com.pancake.monitorbe.service.impl;
 
 import com.pancake.monitorbe.controller.param.TerminalParam;
-import com.pancake.monitorbe.dao.SysMapper;
-import com.pancake.monitorbe.dao.TerminalMapper;
+import com.pancake.monitorbe.dao.*;
 import com.pancake.monitorbe.entity.Terminal;
 import com.pancake.monitorbe.service.TerminalService;
 import com.pancake.monitorbe.util.ErrorMsgException;
@@ -30,6 +29,21 @@ public class TerminalServiceImpl implements TerminalService {
 
     @Resource
     SysMapper sysMapper;
+
+    @Resource
+    WorkinfoMapper workinfoMapper;
+
+    @Resource
+    UpdateHourCountMapper updateHourCountMapper;
+
+    @Resource
+    UpdateDayCountMapper updateDayCountMapper;
+
+    @Resource
+    UpdateMonthCountMapper updateMonthCountMapper;
+
+    @Resource
+    UpdateYearCountMapper updateYearCountMapper;
 
     @Override
     public ArrayList<Terminal> getAllTerminalList() {
@@ -63,20 +77,97 @@ public class TerminalServiceImpl implements TerminalService {
     @Override
     public String insertOneTerminal(TerminalParam tmP) {
         String retMsg = null;
-        if (ObjectUtils.isEmpty(tmP)) {
+        if (!ObjectUtils.isEmpty(tmP)) {
             Terminal tm = terminalParamToTerminal(tmP);
             try {
-                //TODO 待修改：1.需判断tb_sys中是否存在待插入的sysName信息；若不存在，则抛出错误。 2.同时，应该在tb_sys的tm_count字段中加一。
+                //判断tb_sys中是否存在待插入的sysCode信息；若不存在，则抛出错误。
+                if (sysMapper.checkIfExitsSysCode(tm.getSysCode()) != null) {
+                    if (terminalMapper.insertSelective(tm) > 0) {
+                        retMsg = "新增一条终端记录成功！";
+                    }
+                } else {
+                    log.debug("表tb_sys中不存在待插入的sysCode信息！sysCode = {}", tm.getSysCode());
+                    throw new ErrorMsgException("表tb_sys中不存在待插入的sysCode信息！");
+                }
             } catch (Exception e) {
                 log.debug("插入一条终端列表出错：{}", e.getMessage());
                 throw new ErrorMsgException("插入一条终端列表出错！");
             }
         } else {
-            log.debug("传入的参数不正确：tmNameIn = {}", tmP);
+            log.debug("传入的参数不正确：tmP = {}", tmP);
             throw new ErrorMsgException("传入的参数不正确！");
         }
         return retMsg;
     }
+
+    @Override
+    public String updateOneTerminal(TerminalParam tmP) {
+        String retMsg = null;
+        if (!ObjectUtils.isEmpty(tmP)) {
+            Terminal tm = terminalParamToTerminal(tmP);
+            try {
+                if (terminalMapper.updateByPrimaryKeySelective(tm) > 0) {
+                    retMsg = "更新一条终端记录成功！";
+                }
+            } catch (Exception e) {
+                log.debug("更新一条终端列表出错：{}", e.getMessage());
+                throw new ErrorMsgException("插入一条终端列表出错！");
+            }
+        } else {
+            log.debug("传入的参数不正确：tmP = {}", tmP);
+            throw new ErrorMsgException("传入的参数不正确！");
+        }
+        return retMsg;
+    }
+
+    @Override
+    public String deleteOneTerminal(String sysCodeIn, String tmCodeIn) {
+        String retMsg = null;
+        if (StringUtils.hasText(sysCodeIn) && StringUtils.hasText(tmCodeIn)) {
+            try {
+                if (sysMapper.checkIfExitsSysCode(sysCodeIn) != null) {
+                    //TODO 删除操作时，还应当考虑tb_workinfo tb_update_hour_count tb_update_day_count tb_update_month_count tb_update_year_count中是否存在tmCode
+                    //删除终端逻辑待完善
+                    if (workinfoMapper.getListByPrimaryKey(sysCodeIn ,tmCodeIn) == null && !checkIfExistsUpdateCount(sysCodeIn, tmCodeIn)) {
+                        terminalMapper.deleteByPrimaryKey(tmCodeIn);
+                    } else {
+                        log.debug("表tb_workinfo tb_update_hour_count tb_update_day_count tb_update_month_count tb_update_year_count已存在记录！sysCode = {}, tmCode = {}", sysCodeIn, tmCodeIn);
+                        throw new ErrorMsgException("表tb_sys中不存在待删除的sysCode信息！");
+                    }
+                } else {
+                    log.debug("表tb_sys中不存在待删除的tmCode信息！tmCode = {}", tmCodeIn);
+                    throw new ErrorMsgException("表tb_sys中不存在待删除的sysCode信息！");
+                }
+            } catch (Exception e) {
+                log.debug("删除一条终端列表出错：{}", e.getMessage());
+                throw new ErrorMsgException("删除一条终端列表出错！");
+            }
+        } else {
+            log.debug("传入的参数不正确：sysCodeIn = {}, tmCodeIn = {}", sysCodeIn, tmCodeIn);
+            throw new ErrorMsgException("传入的参数不正确！");
+        }
+        return retMsg;
+    }
+
+    /**
+     * 检查tb_update_hour_count tb_update_day_count tb_update_month_count tb_update_year_count中是否存在记录
+     *
+     * @param sysCodeIn
+     * @param tmCodeIn
+     * @return boolean
+     * @author PancakeCN
+     * @date 2022/4/2 11:28
+     */
+    public boolean checkIfExistsUpdateCount(String sysCodeIn, String tmCodeIn) {
+        if (updateHourCountMapper.getListByPrimaryKey(sysCodeIn, tmCodeIn) != null &&
+            updateDayCountMapper.getListByPrimaryKey(sysCodeIn, tmCodeIn) != null &&
+            updateMonthCountMapper.getListByPrimaryKey(sysCodeIn, tmCodeIn) != null &&
+            updateYearCountMapper.getListByPrimaryKey(sysCodeIn, tmCodeIn) != null) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * TerminalParam转Terminal

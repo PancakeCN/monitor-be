@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pancake.monitorbe.dao.UpdateYearCountMapper">
+    <resultMap type="com.pancake.monitorbe.entity.UpdateYearCount" id="BaseResultMap">
+        <result property="sysCode" jdbcType="VARCHAR" column="sys_code"/>
+        <result property="tmCode" jdbcType="VARCHAR" column="tm_code"/>
+        <result property="year" jdbcType="VARCHAR" column="year"/>
+        <result property="count" jdbcType="INTEGER" column="count"/>
+    </resultMap>
+    <!--
+        按照sysCode和tmCode获取列表
+    -->
+    <select id="getListByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
+        select * from monitor.tb_update_year_count
+        where sys_code = #{sysCodeIn, jdbcType=VARCHAR} and tm_code = #{tmCodeIn, jdbcType=VARCHAR}
+    </select>
+
+</mapper>
