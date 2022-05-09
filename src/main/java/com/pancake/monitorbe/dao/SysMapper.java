@@ -13,6 +13,16 @@ import java.util.List;
 public interface SysMapper {
 
     /**
+     * 通过主键查询一条记录
+     *
+     * @param sysCode sysCode
+     * @return com.pancake.monitorbe.entity.Sys
+     * @author PancakeCN
+     * @date 2022/5/7 20:32
+     */
+    Sys getSystemByPrimaryKey(String sysCode);
+
+    /**
      * 获取所有系统列表
      *
      * @return java.util.ArrayList<com.pancake.monitorbe.entity.Sys>

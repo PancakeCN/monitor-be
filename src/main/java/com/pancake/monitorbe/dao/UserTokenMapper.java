@@ -12,7 +12,7 @@ public interface UserTokenMapper {
     /**
      * 按照主键获取token表的所有值
      *
-     * @param loginName
+     * @param loginName 登录名
      * @return com.pancake.monitorbe.entity.UserToken
      * @author PancakeCN
      * @date 2022/3/12 11:22
@@ -22,7 +22,7 @@ public interface UserTokenMapper {
     /**
      * 选择性插入token
      *
-     * @param userToken
+     * @param userToken token
      * @return boolean
      * @author PancakeCN
      * @date 2022/3/12 11:45
@@ -40,4 +40,14 @@ public interface UserTokenMapper {
      * @date 2022/3/18 1:46
      */
     int deleteByPrimaryKey(String loginName);
+
+    /**
+     * 通过主键选择性更新一条记录
+     *
+     * @param userToken token
+     * @return int
+     * @author PancakeCN
+     * @date 2022/4/22 19:44
+     */
+    int updateByPrimaryKeySelective(UserToken userToken);
 }

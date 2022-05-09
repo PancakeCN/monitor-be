@@ -11,6 +11,13 @@
         sys_code, sys_name, sys_name_abbr, tm_count
     </sql>
 <!--
+    通过主键查询一条记录
+-->
+    <select id="getSystemByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from monitor.tb_sys
+        where sys_code = #{sysCode, jdbcType=VARCHAR}
+    </select>
+<!--
     查询所有系统列表
 -->
     <select id="getAllSystemList" resultMap="BaseResultMap">

@@ -44,4 +44,18 @@ public class SystemUtil {
         }
 
     }
+
+    /**
+     * 计算分页查询的初始偏移值
+     *
+     * @param pageIndex 第几页
+     * @param pageNum 每页条数
+     * @return java.lang.Integer
+     * @author PancakeCN
+     * @date 2022/5/3 23:47
+     */
+    public static Integer genPageOffset(Integer pageIndex, Integer pageNum) {
+        return (pageIndex - 1) * pageNum;
+    }
+
 }

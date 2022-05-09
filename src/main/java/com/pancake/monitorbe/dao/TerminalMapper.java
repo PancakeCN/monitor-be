@@ -11,6 +11,18 @@ import java.util.List;
  * @date 2022/3/2 1:52
  */
 public interface TerminalMapper {
+
+    /**
+     * 通过主键查询一条记录
+     *
+     * @param sysCode sysCode
+     * @param tmCode tmCode
+     * @return com.pancake.monitorbe.entity.Terminal
+     * @author PancakeCN
+     * @date 2022/5/7 17:29
+     */
+    Terminal getTerminalByPrimaryKey(String sysCode, String tmCode);
+
     /**
      * 查询所有终端
      *
@@ -75,5 +87,5 @@ public interface TerminalMapper {
 
     int updateByPrimaryKeySelective(Terminal tm);
 
-    int deleteByPrimaryKey(String tmCode);
+    int deleteByPrimaryKey(String sysCode, String tmCode);
 }

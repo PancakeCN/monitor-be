@@ -5,6 +5,7 @@ import com.pancake.monitorbe.common.Constants;
 import com.pancake.monitorbe.controller.param.UserParam;
 import com.pancake.monitorbe.service.UserService;
 import com.pancake.monitorbe.model.RetResult;
+import com.pancake.monitorbe.util.ErrorMsgException;
 import com.pancake.monitorbe.util.RetResultGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -39,27 +40,44 @@ public class UserController {
             dataType = "com.pancake.monitorbe.controller.param.LoginParam")
     @PostMapping("/login")
     public RetResult<Object> login(@RequestBody @Valid LoginParam loginParam) {
-        if (loginParam == null || !StringUtils.hasText(loginParam.getLoginName())
-                || !StringUtils.hasText(loginParam.getPasswordMd5())) {
-            return RetResultGenerator.genFailResult("用户名或密码不能为空");
+        try {
+            if (loginParam == null || !StringUtils.hasText(loginParam.getLoginName())
+                    || !StringUtils.hasText(loginParam.getPasswordMd5())) {
+                return RetResultGenerator.genFailResult("用户名或密码不能为空");
+            }
+            String loginResult = userService.login(loginParam.getLoginName(), loginParam.getPasswordMd5());
+            logger.info("login api, loinName = {}, loginResult = {}", loginParam.getLoginName(), loginResult);
+            //登录成功
+            if (StringUtils.hasText(loginResult) && loginResult.length() == Constants.TOKEN_LENGTH) {
+                RetResult retResult = RetResultGenerator.genSuccessResult();
+                retResult.setData(loginResult);
+                return retResult;
+            }
+            //登录失败
+            return RetResultGenerator.genFailResult(loginResult);
+        } catch (ErrorMsgException e) {
+            logger.error("用户登录时出错：{}", e.getMessage());
+            return RetResultGenerator.genFailResult(e.getMessage());
+        } catch (Exception e) {
+            logger.error("服务器出错：{}", e.getMessage());
+            return RetResultGenerator.genFailResult("服务器出错:"+e.getMessage());
         }
-        String loginResult = userService.login(loginParam.getLoginName(), loginParam.getPasswordMd5());
-        logger.info("login api, loinName = {}, loginResult = {}", loginParam.getLoginName(), loginResult);
-        //登录成功
-        if (StringUtils.hasText(loginResult) && loginResult.length() == Constants.TOKEN_LENGTH) {
-            RetResult retResult = RetResultGenerator.genSuccessResult();
-            retResult.setData(loginResult);
-            return retResult;
-        }
-        //登录失败
-        return RetResultGenerator.genFailResult(loginResult);
+
     }
 
 
     @ApiOperation(value = "查询所有记录（筛选后）")
     @GetMapping("/getUserListFull")
-    public RetResult<Object> getUserListFull(){
-        return RetResultGenerator.genSuccessResult(userService.getUserListFull());
+    public RetResult<Object> getUserListFull(@RequestParam Integer pageIndex, @RequestParam Integer pageNum){
+        try {
+            return RetResultGenerator.genSuccessResult(userService.getUserListFull(pageIndex, pageNum));
+        } catch (ErrorMsgException e) {
+            logger.error("查询记录时出错：{}", e.getMessage());
+            return RetResultGenerator.genFailResult(e.getMessage());
+        } catch (Exception e) {
+            logger.error("服务器出错：{}", e.getMessage());
+            return RetResultGenerator.genFailResult("服务器出错:"+e.getMessage());
+        }
     }
 
 
@@ -90,6 +108,7 @@ public class UserController {
             dataType = "com.pancake.monitorbe.controller.param.UserParam")
     @PostMapping("/insertOneUser")
     public RetResult<Object> insertOneUser(@RequestBody UserParam userP) {
+        System.out.println("接收数据："+userP.toString());
         if (ObjectUtils.isEmpty(userP)){
             return RetResultGenerator.genFailResult("接口调用失败！请确认请求参数。");
         }else {

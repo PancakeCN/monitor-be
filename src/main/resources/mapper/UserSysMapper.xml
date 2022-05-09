@@ -38,7 +38,7 @@
     通过主键删除数据
 -->
     <delete id="deleteByPrimaryKey" parameterType="String">
-        delete from monitor.tb_user_sys where login_name = #{loginName};
+        delete from monitor.tb_user_sys where login_name = #{loginName, jdbcType=VARCHAR};
     </delete>
 
 </mapper>

@@ -31,6 +31,8 @@ public class TerminalParam {
     private int redWarnPeriod;
     /**黄色告警间隔*/
     private int yellowWarnPeriod;
+    /**心跳时间*/
+    private long heartbeat;
     /**心跳状态标识*/
     private int heartStat;
     /**心跳间隔*/

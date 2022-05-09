@@ -29,7 +29,7 @@
     获取所有用户列表
 -->
     <select id="getAllUserList" resultMap="UserResultMap">
-        select * from monitor.view_user
+        select * from monitor.view_user limit #{pageOffset, jdbcType=INTEGER}, #{pageNum, jdbcType=INTEGER}
     </select>
 
 <!--

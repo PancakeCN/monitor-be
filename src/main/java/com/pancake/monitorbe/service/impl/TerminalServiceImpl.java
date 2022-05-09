@@ -129,7 +129,7 @@ public class TerminalServiceImpl implements TerminalService {
                     //TODO 删除操作时，还应当考虑tb_workinfo tb_update_hour_count tb_update_day_count tb_update_month_count tb_update_year_count中是否存在tmCode
                     //删除终端逻辑待完善
                     if (workinfoMapper.getListByPrimaryKey(sysCodeIn ,tmCodeIn) == null && !checkIfExistsUpdateCount(sysCodeIn, tmCodeIn)) {
-                        terminalMapper.deleteByPrimaryKey(tmCodeIn);
+                        terminalMapper.deleteByPrimaryKey(sysCodeIn, tmCodeIn);
                     } else {
                         log.debug("表tb_workinfo tb_update_hour_count tb_update_day_count tb_update_month_count tb_update_year_count已存在记录！sysCode = {}, tmCode = {}", sysCodeIn, tmCodeIn);
                         throw new ErrorMsgException("表tb_sys中不存在待删除的sysCode信息！");
@@ -181,7 +181,7 @@ public class TerminalServiceImpl implements TerminalService {
         return new Terminal(
                 tmP.getSysCode(), tmP.getTmCode(), tmP.getTmName(),
                 tmP.getTmIp(), tmP.getLastUpdateTime(), tmP.getRedWarnPeriod(),
-                tmP.getYellowWarnPeriod(), tmP.getHeartStat(), tmP.getHeartPeriod(), tmP.getDataStat()
+                tmP.getYellowWarnPeriod(), 0, tmP.getHeartStat(), tmP.getHeartPeriod(), tmP.getDataStat()
         );
     }
 }

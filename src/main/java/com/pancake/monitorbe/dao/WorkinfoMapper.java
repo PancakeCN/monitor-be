@@ -32,4 +32,14 @@ public interface WorkinfoMapper {
      * @date 2022/4/2 10:07
      */
     List<WorkInfo> getListBySysCode(String sysCodeIn);
+
+    /**
+     * 选择性插入一条记录
+     *
+     * @param workInfo  workinfo
+     * @return int
+     * @author PancakeCN
+     * @date 2022/5/7 20:09
+     */
+    int insertSelective(WorkInfo workInfo);
 }

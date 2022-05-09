@@ -77,7 +77,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!--    Lombok    -->
+        <!--  引入 Lombok    -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -101,11 +101,18 @@
 <!--            <version>1.9.6</version>-->
 <!--        </dependency>-->
 
-        <!--    Hutool java工具包    -->
+        <!--   引入 Hutool java工具包    -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.0.M1</version>
+        </dependency>
+
+        <!--   引入SOAP服务的框架（CXF）   -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <version>3.5.1</version>
         </dependency>
 
     </dependencies>

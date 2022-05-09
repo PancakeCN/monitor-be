@@ -9,6 +9,7 @@
         <result property="lastUpdateTime" jdbcType="TIMESTAMP" column="last_update_time"/>
         <result property="redWarnPeriod" jdbcType="INTEGER" column="red_warn_period"/>
         <result property="yellowWarnPeriod" jdbcType="INTEGER" column="yellow_warn_period"/>
+        <result property="heartbeat" jdbcType="INTEGER" column="heartbeat"/>
         <result property="heartStat" jdbcType="INTEGER" column="heart_stat"/>
         <result property="heartPeriod" jdbcType="INTEGER" column="heart_period"/>
         <result property="dataStat" jdbcType="INTEGER" column="data_stat"/>
@@ -22,6 +23,13 @@
         <result property="heartStat" jdbcType="INTEGER" column="heart_stat"/>
         <result property="dataStat" jdbcType="INTEGER" column="data_stat"/>
     </resultMap>
+<!--
+    通过主键查询一条记录
+-->
+    <select id="getTerminalByPrimaryKey" resultMap="BaseResultMap">
+        select * from monitor.tb_terminal
+        where sys_code = #{sysCode, jdbcType=VARCHAR} and tm_code = #{tmCode, jdbcType=VARCHAR}
+    </select>
 <!--
     获取所有终端列表
 -->
@@ -124,6 +132,9 @@
             <if test="yellowWarnPeriod != null">
                 yellow_warn_period,
             </if>
+            <if test="heartbeat != null">
+                heartbeat,
+            </if>
             <if test="heartStat != null">
                 heart_stat,
             </if>
@@ -155,6 +166,9 @@
             </if>
             <if test="yellowWarnPeriod != null">
                 #{yellowWarnPeriod, jdbcType=INTEGER},
+            </if>
+            <if test="heartbeat != null">
+                #{heartbeat, jdbcType=INTEGER},
             </if>
             <if test="heartStat != null">
                 #{heartStat, jdbcType=INTEGER},
@@ -194,6 +208,9 @@
                 <if test="yellowWarnPeriod != null">
                     yellow_warn_period = #{yellowWarnPeriod, jdbcType=INTEGER},
                 </if>
+                <if test="heartbeat != null">
+                    heartbeat = #{heartbeat, jdbcType=INTEGER},
+                </if>
                 <if test="heartStat != null">
                     heart_stat = #{heartStat, jdbcType=INTEGER},
                 </if>
@@ -204,12 +221,12 @@
                     data_stat = #{dataStat, jdbcType=INTEGER},
                 </if>
             </set>
-            where tm_code = #{tmCode, jdbcType=VARCHAR}
+            where sys_code = #{sysCode, jdbcType=VARCHAR} and tm_code = #{tmCode, jdbcType=VARCHAR}
         </update>
 <!--
     按主键删除一条终端数据
 -->
         <delete id="deleteByPrimaryKey" parameterType="String">
-            delete from monitor.tb_terminal where tm_code = #{tmCode. jdbcType=VARCHAR}
+            delete from monitor.tb_terminal where sys_code = #{sysCode, jdbcType=VARCHAR} and tm_code = #{tmCode. jdbcType=VARCHAR}
         </delete>
 </mapper>

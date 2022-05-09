@@ -11,3 +11,9 @@ mybatis:
 
 #logging:
 #  config: classpath:log4j2-spring.xml
+
+# 多线程配置
+async:
+  corePoolSize: 10
+  maxPoolSize: 100
+  queueCapacity: 10

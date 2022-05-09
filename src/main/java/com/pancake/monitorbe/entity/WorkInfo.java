@@ -19,7 +19,7 @@ import lombok.ToString;
 public class WorkInfo {
 
     /**id值*/
-    private int id;
+    private Integer id;
     /**系统识别码*/
     private String sysCode;
     /**终端识别码*/

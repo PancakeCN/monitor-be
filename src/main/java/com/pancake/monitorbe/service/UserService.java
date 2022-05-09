@@ -32,7 +32,7 @@ public interface UserService {
      * @author PancakeCN
      * @date 2022/3/14 13:19
      */
-    ArrayList<UserParam> getUserListFull();
+    ArrayList<UserParam> getUserListFull(Integer pageIndex, Integer pageNum);
 
     /**
      * 通过username模糊查询用户列表

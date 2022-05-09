@@ -55,11 +55,29 @@
         </trim>
     </insert>
 
-
 <!--
     通过主键删除
 -->
     <delete id="deleteByPrimaryKey" parameterType="String">
         delete from monitor.tb_user_token where login_name = #{loginName};
     </delete>
+
+<!--
+    通过主键选择性更新一条记录
+-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.pancake.monitorbe.entity.UserToken">
+        update monitor.tb_user_token
+        <set>
+            <if test="token != null">
+                token = #{token, jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime, jdbcType=TIMESTAMP},
+            </if>
+            <if test="expireTime != null">
+                expire_time = #{expireTime, jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where login_name = #{loginName, jdbcType=VARCHAR}
+    </update>
 </mapper>

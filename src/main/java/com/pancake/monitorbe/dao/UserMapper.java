@@ -29,7 +29,7 @@ public interface UserMapper {
      * @date 2022/2/12 3:07
      * @return ArrayList<UserResult>
      */
-    ArrayList<UserResult> getAllUserList();
+    ArrayList<UserResult> getAllUserList(Integer pageOffset, Integer pageNum);
 
     /**
      * 通过主键获取一条用户信息

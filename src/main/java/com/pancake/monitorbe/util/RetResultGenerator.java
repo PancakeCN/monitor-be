@@ -50,7 +50,7 @@ public class RetResultGenerator {
         RetResult<T> retResult = new RetResult<>();
         retResult.setResultCode(RESULT_CODE_SERVER_ERROR);
         retResult.setMessage(DEFAULT_FAIL_MESSAGE);
-        log.info("Failed. The result is:"+ retResult);
+        log.error("Failed. The result is:"+ retResult);
         return retResult;
     }
     /**返回失败信息 重载1*/
@@ -58,7 +58,7 @@ public class RetResultGenerator {
         RetResult<T> retResult = new RetResult<>();
         retResult.setResultCode(RESULT_CODE_SERVER_ERROR);
         retResult.setMessage(message);
-        log.info("Failed. The result is:"+ retResult);
+        log.error("Failed. The result is:"+ retResult);
         return retResult;
     }
     /**返回自定义类型信息*/

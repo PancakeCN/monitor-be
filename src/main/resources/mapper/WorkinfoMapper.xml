@@ -32,6 +32,46 @@
         select * from monitor.tb_workinfo
         where sys_code = #{sysCodeIn, jdbcType=VARCHAR}
     </select>
+    <!--
+        选择性新增一条终端记录
+    -->
+    <insert id="insertSelective" parameterType="com.pancake.monitorbe.entity.WorkInfo">
+        insert into monitor.tb_workinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sysCode != null">
+                sys_code,
+            </if>
+            <if test="tmCode != null">
+                tm_code,
+            </if>
+            <if test="workInfo != null">
+                work_info,
+            </if>
+            <if test="workIp != null">
+                work_ip,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sysCode != null">
+                #{sysCode, jdbcType=VARCHAR},
+            </if>
+            <if test="tmCode != null">
+                #{tmCode, jdbcType=VARCHAR},
+            </if>
+            <if test="workInfo != null">
+                #{workInfo, jdbcType=VARCHAR},
+            </if>
+            <if test="workIp != null">
+                #{workIp, jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime, jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
 <!--    &lt;!&ndash;-->
 <!--        获取终端总数-->
 <!--    &ndash;&gt;-->
@@ -92,76 +132,6 @@
 <!--    <select id="getTmListByTmNameFuzzy" parameterType="String" resultMap="BaseResultMap">-->
 <!--        select * from monitor.tb_terminal where tm_name like concat('%', #{tmName, jdbcType=VARCHAR},'%')-->
 <!--    </select>-->
-<!--    &lt;!&ndash;-->
-<!--        选择性新增一条终端记录-->
-<!--    &ndash;&gt;-->
-<!--    <insert id="insertSelective" parameterType="com.pancake.monitorbe.entity.Terminal">-->
-<!--        insert into monitor.tb_terminal-->
-<!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
-<!--            <if test="sysCode != null">-->
-<!--                sys_code,-->
-<!--            </if>-->
-<!--            <if test="tmCode != null">-->
-<!--                tm_code,-->
-<!--            </if>-->
-<!--            <if test="tmName != null">-->
-<!--                tm_name,-->
-<!--            </if>-->
-<!--            <if test="tmIp != null">-->
-<!--                tm_ip,-->
-<!--            </if>-->
-<!--            <if test="lastUpdateTime != null">-->
-<!--                last_update_time,-->
-<!--            </if>-->
-<!--            <if test="redWarnPeriod != null">-->
-<!--                red_warn_period,-->
-<!--            </if>-->
-<!--            <if test="yellowWarnPeriod != null">-->
-<!--                yellow_warn_period,-->
-<!--            </if>-->
-<!--            <if test="heartStat != null">-->
-<!--                heart_stat,-->
-<!--            </if>-->
-<!--            <if test="heartPeriod != null">-->
-<!--                heart_period,-->
-<!--            </if>-->
-<!--            <if test="dataStat != null">-->
-<!--                data_stat,-->
-<!--            </if>-->
-<!--        </trim>-->
-<!--        <trim prefix="values (" suffix=")" suffixOverrides=",">-->
-<!--            <if test="sysCode != null">-->
-<!--                #{sysCode, jdbcType=VARCHAR},-->
-<!--            </if>-->
-<!--            <if test="tmCode != null">-->
-<!--                #{tmCode, jdbcType=VARCHAR},-->
-<!--            </if>-->
-<!--            <if test="tmName != null">-->
-<!--                #{tmName, jdbcType=VARCHAR},-->
-<!--            </if>-->
-<!--            <if test="tmIp != null">-->
-<!--                #{tmIp, jdbcType=VARCHAR},-->
-<!--            </if>-->
-<!--            <if test="lastUpdateTime != null">-->
-<!--                #{lastUpdateTime, jdbcType=TIMESTAMP},-->
-<!--            </if>-->
-<!--            <if test="redWarnPeriod != null">-->
-<!--                #{redWarnPeriod, jdbcType=INTEGER},-->
-<!--            </if>-->
-<!--            <if test="yellowWarnPeriod != null">-->
-<!--                #{yellowWarnPeriod, jdbcType=INTEGER},-->
-<!--            </if>-->
-<!--            <if test="heartStat != null">-->
-<!--                #{heartStat, jdbcType=INTEGER},-->
-<!--            </if>-->
-<!--            <if test="heartPeriod != null">-->
-<!--                #{heartPeriod, jdbcType=INTEGER},-->
-<!--            </if>-->
-<!--            <if test="dataStat != null">-->
-<!--                #{dataStat, jdbcType=INTEGER},-->
-<!--            </if>-->
-<!--        </trim>-->
-<!--    </insert>-->
 <!--    &lt;!&ndash;-->
 <!--        按主键选择性更新一条终端记录-->
 <!--    &ndash;&gt;-->
